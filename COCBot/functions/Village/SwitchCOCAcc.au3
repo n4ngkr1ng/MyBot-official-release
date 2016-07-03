@@ -327,6 +327,7 @@ Func ReorderAllPro($cfgStr, $GUIconfig = false)
 		If IsDeclared("txtProfileIdxOrder") Then GUICtrlSetData($txtProfileIdxOrder, $reorderstr)
 	EndIf
 	Local $comboBoxArray = _GUICtrlComboBox_GetListArray($cmbProfile)
+	 If  _GUICtrlComboBox_GetCount($cmbProfile) = 0 Then Return "Set up profiles!"
 	$reorderstr &= " ([1]" & $comboBoxArray[$anBotProfileIdx[0]]
 	For $i = 1 to $nTotalCOCAcc - 1
 		$reorderstr &= ", [" & ($i + 1) & "]" & $comboBoxArray[$anBotProfileIdx[$i]]
