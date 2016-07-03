@@ -647,8 +647,3 @@ Func _RunFunction($action)
 	EndSwitch
 	SetDebugLog("_RunFunction: " & $action & " END")
 EndFunc   ;==>_RunFunction
-
-Func myHide()   ;Chalicucu hide BS
-    $Hide = False   
-    btnHide()
-EndFunc     ;==>myHide
