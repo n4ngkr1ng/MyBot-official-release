@@ -113,7 +113,7 @@ Local $x = 20, $y = 25
 			EndIf
 			
 		; Chalicucu & demen: switch CoC Acc GUI
-		GUICtrlCreateGroup(GetTranslated(636,2, "Switch CoC Accounts"), $x - 10, $y + 40, 240, 180)
+		GUICtrlCreateGroup(GetTranslated(636,2, "Switch CoC Accounts"), $x - 10, $y + 40, 440, 150)
 			$y += 60
 			
 			$chkSwitchAcc = GUICtrlCreateCheckbox("Enable Switch Account", $x, $y, -1, -1)
@@ -126,7 +126,7 @@ Local $x = 20, $y = 25
 			
 			$y += 30
 			$lbTotalCoCAcc = GUICtrlCreateLabel("Total CoC Accounts", $x , $y, 130, 20)
-			$txtTotalCoCAcc = GUICtrlCreateInput("0", $x + 140 , $y - 2, 70, 20,  BitOR($SS_LEFT, $ES_AUTOHSCROLL))
+			$txtTotalCoCAcc = GUICtrlCreateInput("0", $x + 140 , $y - 2, 20, 20,  BitOR($SS_LEFT, $ES_AUTOHSCROLL))
 			GUICtrlSetLimit(-1, 1)
 			GUICtrlSetTip(-1,"Number of Google Accounts on emulator. Supporting maximum 8 Accounts.")
 			
