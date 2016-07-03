@@ -116,7 +116,6 @@ Func checkObstacles() ;Checks if something is in the way for mainscreen
 		EndSelect
 		PureClickP($aReloadButton, 1, 0, "#0131"); Click for out of sync or inactivity or connection lost or maintenance
 		If _Sleep($iDelaycheckObstacles3) Then Return
-		myHide()    ;Chalicucu hide Emulator
 		Return True
 	EndIf
 	;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
