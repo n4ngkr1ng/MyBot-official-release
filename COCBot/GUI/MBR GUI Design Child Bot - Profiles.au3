@@ -113,7 +113,7 @@ Local $x = 20, $y = 25
 			EndIf
 			
 		; Chalicucu & demen: switch CoC Acc GUI
-		GUICtrlCreateGroup(GetTranslated(636,2, "Switch CoC Accounts"), $x - 10, $y + 40, 420, 150)
+		GUICtrlCreateGroup(GetTranslated(636,2, "Switch CoC Accounts"), $x - 10, $y + 40, 430, 150)
 			$y += 60
 			
 			$chkSwitchAcc = GUICtrlCreateCheckbox("Enable Switch Account", $x, $y, -1, -1)
