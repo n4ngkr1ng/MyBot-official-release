@@ -251,3 +251,4 @@
 #include "functions\Village\UpgradeHeroes.au3"
 #include "functions\Village\ClanLevel.au3"
 #include "functions\Village\StarBonus.au3"
+#include "functions\Village\SwitchCOCAcc.au3"		; Chalicucu Switch COC account

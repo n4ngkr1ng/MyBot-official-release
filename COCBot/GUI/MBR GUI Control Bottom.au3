@@ -55,6 +55,7 @@ Func Initiate()
 		If Not $RunState Then Return
 
 		checkMainScreen()
+		;InitOrder();chalicucu
 		If Not $RunState Then Return
 
 		ZoomOut()
@@ -233,7 +234,8 @@ Func btnStart()
 			SetLog("Cannot start " & $Android & ", please check log", $COLOR_RED)
 			btnStop()
 		EndIf
-
+		
+		AccStartInit()		;Chalicucu init COC Account environment
 	EndIf
 
 EndFunc   ;==>btnStart

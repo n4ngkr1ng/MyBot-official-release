@@ -111,5 +111,45 @@ Local $x = 20, $y = 25
 			Else
 				GUICtrlSetState(-1, $GUI_ENABLE)
 			EndIf
+			
+		; Chalicucu & demen: switch CoC Acc GUI
+		GUICtrlCreateGroup(GetTranslated(636,2, "Switch CoC Accounts"), $x - 10, $y + 40, 240, 180)
+			$y += 60
+			
+			$chkSwitchAcc = GUICtrlCreateCheckbox("Enable Switch Account", $x, $y, -1, -1)
+			$txtTip = "Switch to another account & profile when camp is less than 85%" & @CRLF & _
+			          "This function supports maximum 8 CoC accounts & 3 Bot profiles" & @CRLF & _
+			          "Make sure to align the accounts with profiles in listing order"
+			GUICtrlSetTip(-1, $txtTip)
+			GUICtrlSetOnEvent(-1, "chkSwitchAcc")
+			;GUICtrlSetState(-1, $GUI_CHECKED)
+			
+			$y += 30
+			$lbTotalCoCAcc = GUICtrlCreateLabel("Total CoC Accounts", $x , $y, 130, 20)
+			$txtTotalCoCAcc = GUICtrlCreateInput("0", $x + 140 , $y - 2, 70, 20,  BitOR($SS_LEFT, $ES_AUTOHSCROLL))
+			GUICtrlSetLimit(-1, 1)
+			GUICtrlSetTip(-1,"Number of Google Accounts on emulator. Supporting maximum 8 Accounts.")
+			
+			$y += 30
+			$lbAccBottingOrder = GUICtrlCreateLabel("CoC Accounts botting order", $x , $y, 130, 20)
+			$txtAccBottingOrder = GUICtrlCreateInput("12345678", $x + 140 , $y - 2, 70, 20,  BitOR($SS_LEFT, $ES_AUTOHSCROLL))
+			;GUICtrlSetLimit(-1, 8)
+			GUICtrlSetTip(-1,"Input the desired order of switching CoC Accounts.")
+			
+			$y += 30
+			$lbProfileIdxOrder = GUICtrlCreateLabel("BOT Profile Indexs order", $x , $y, 130, 20)
+			$txtProfileIdxOrder = GUICtrlCreateInput("12345678", $x + 140 , $y - 2, 70, 20,  BitOR($SS_LEFT, $ES_AUTOHSCROLL))
+			GUICtrlSetLimit(-1, 8)
+			GUICtrlSetTip(-1,"Input the order of Profiles to align with CoC Accounts order. Supporting maximum 8 Profiles")
+			
+			$y += 30
+			$chkAccRelax = GUICtrlCreateCheckbox("Attack relax together", $x, $y, -1, -1)
+			$txtTip = "If attack is not planned for current profile" & @CRLF & _
+			          "Then bot stop emulator and relax"
+			GUICtrlSetTip(-1, $txtTip)
+			GUICtrlSetOnEvent(-1, "chkAccRelaxTogether")
+			;GUICtrlSetState(-1, $GUI_CHECKED)
+		GUICtrlCreateGroup("", -99, -99, 1, 1)
+		
 	GUICtrlCreateGroup("", -99, -99, 1, 1)
 ;GUISetState()

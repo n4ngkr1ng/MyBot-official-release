@@ -829,7 +829,7 @@ Func applyConfig($bRedrawAtExit = True) ;Applies the data from config to the con
 		EndIf
 	Next
 
-	For $i = 0 To 6
+	For $i = 0 To 7
 		If $iPlannedAttackWeekDays[$i] = 1 Then
 			GUICtrlSetState(Eval("chkAttackWeekdays" & $i), $GUI_CHECKED)
 		Else
@@ -2361,8 +2361,21 @@ LoadABSnipeAttacks() ; recreate combo box values
 _GUICtrlComboBox_SetCurSel($cmbTHSnipeBeforeLBScript, _GUICtrlComboBox_FindStringExact($cmbTHSnipeBeforeLBScript, $THSnipeBeforeLBScript))
 
 
-
-
+	;chalicucu & demen:  switchcocacc
+	If $ichkSwitchAcc = 1 Then
+	   GUICtrlSetState($chkSwitchAcc, $GUI_CHECKED)
+    Else
+	   GUICtrlSetState($chkSwitchAcc, $GUI_UNCHECKED)
+    EndIf
+	If $AccRelaxTogether = 1 Then
+	   GUICtrlSetState($chkAccRelax, $GUI_CHECKED)
+    Else
+	   GUICtrlSetState($chkAccRelax, $GUI_UNCHECKED)
+    EndIf
+	
+	GUICtrlSetData($txtTotalCoCAcc, IniRead($profile, "switchcocacc" , "totalacc" ,"0"))
+	GUICtrlSetData($txtAccBottingOrder, IniRead($profile, "switchcocacc" , "order" ,"123"))
+	GUICtrlSetData($txtProfileIdxOrder, IniRead($profile, "switchcocacc" , "profile" ,"123"))
 
 
 	; Reenabling window redraw
