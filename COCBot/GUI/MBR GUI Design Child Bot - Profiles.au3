@@ -126,7 +126,7 @@ Local $x = 20, $y = 25
 			
 			$y += 25
 			$lbTotalCoCAcc = GUICtrlCreateLabel("Total CoC Accounts", $x , $y, 130, 20)
-			$txtTotalCoCAcc = GUICtrlCreateInput("0", $x + 140 , $y - 2, 20, 20,  BitOR($SS_LEFT, $ES_AUTOHSCROLL))
+			$txtTotalCoCAcc = GUICtrlCreateInput("0", $x + 140 , $y - 2, 35, 20,  BitOR($SS_LEFT, $ES_AUTOHSCROLL))
 			GUICtrlSetLimit(-1, 1)
 			GUICtrlSetTip(-1,"Number of Google Accounts on emulator. Supporting maximum 8 Accounts.")
 			
