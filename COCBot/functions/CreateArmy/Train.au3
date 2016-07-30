@@ -158,12 +158,11 @@ Func Train()
 
 	If _Sleep($iDelayRunBot6) Then Return ; wait for window to open
 	If Not (IsTrainPage()) Then Return ; exit if I'm not in train page
-	
+
 	;Chalicucu get remain train time
 	$iRemainTrainTime = RemainTrainTime(True, False, False)
 	SetLog("Training remain: " & $iRemainTrainTime & " minute(s)", $COLOR_GREEN)
 	SetCurTrainTime($iRemainTrainTime)
-	
 	checkAttackDisable($iTaBChkIdle) ; Check for Take-A-Break after opening train page
 
 	; CHECK IF NEED TO MAKE TROOPS
@@ -451,7 +450,7 @@ Func Train()
 		SetLog("Dark here", $COLOR_RED)
 		For $i = 0 To UBound($TroopDarkName) - 1
 			Assign(("Cur" & $TroopDarkName[$i]), Eval("Cur" & $TroopDarkName[$i]) + Eval($TroopDarkName[$i] & "Comp"))
-			
+
 			If $debugsetlogTrain = 1 And Number($anotherTroops + Eval($TroopDarkName[$i] & "Comp")) <> 0 Then SetLog("-- AnotherTroops dark to train:" & $anotherTroops & " + " & Eval($TroopDarkName[$i] & "Comp") & "*" & $TroopDarkHeight[$i], $COLOR_PURPLE)
 			$anotherTroops += Eval($TroopDarkName[$i] & "Comp") * $TroopDarkHeight[$i]
 			;################################################################################
@@ -1204,16 +1203,18 @@ Func Train()
 		VillageReport(True, True)
 	WEnd
 
-	If $tempElixir <> "" And $iElixirCurrent <> "" Then
+    If $tempElixir <> "" And $iElixirCurrent <> "" Then
 		$tempElixirSpent = ($tempElixir - $iElixirCurrent)
 		$iTrainCostElixir += $tempElixirSpent
 		$iElixirTotal -= $tempElixirSpent
+		$aElixirTotalAcc[$nCurProfile-1] -= $tempElixirSpent ; Separate stats per account - SwitchAcc - DEMEN
 	EndIf
 
 	If $tempDElixir <> "" And $iDarkCurrent <> "" Then
 		$tempDElixirSpent = ($tempDElixir - $iDarkCurrent)
 		$iTrainCostDElixir += $tempDElixirSpent
 		$iDarkTotal -= $tempDElixirSpent
+		$aDarkTotalAcc[$nCurProfile - 1] -= $tempDElixirSpent ; Separate stats per account - SwitchAcc -  DEMEN
 	EndIf
 
 	UpdateStats()
