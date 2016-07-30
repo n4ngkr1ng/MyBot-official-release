@@ -17,6 +17,12 @@
 Func checkObstacles() ;Checks if something is in the way for mainscreen
 	Local $x, $y, $result
 	$MinorObstacle = False
+	;Chalicucu click Cancel Button while load other village
+	; If _ColorCheck(_GetPixelColor(443, 430, True), Hex(4284390935, 6), 20) Then
+	If _GetPixelColor(443, 430, True) = Hex(4284390935, 6) Then
+		PureClick(383, 430, 1, 0, "Click Cancel")      ;Click Cancel
+		If _Sleep(250) Then Return
+	EndIf
 	;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 	; Detect All Reload Button errors => 1- Another device, 2- Take a break, 3- Connection lost or error, 4- Out of sync, 5- Inactive, 6- Maintenance
 	$Message = _PixelSearch($aIsReloadError[0], $aIsReloadError[1], $aIsReloadError[0] + 3, $aIsReloadError[1] + 11, Hex($aIsReloadError[2], 6), $aIsReloadError[3])
@@ -110,6 +116,7 @@ Func checkObstacles() ;Checks if something is in the way for mainscreen
 		EndSelect
 		PureClickP($aReloadButton, 1, 0, "#0131"); Click for out of sync or inactivity or connection lost or maintenance
 		If _Sleep($iDelaycheckObstacles3) Then Return
+		myHide()    ;Chalicucu hide Emulator
 		Return True
 	EndIf
 	;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

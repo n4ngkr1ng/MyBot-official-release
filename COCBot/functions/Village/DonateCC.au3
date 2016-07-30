@@ -534,6 +534,7 @@ Func DonateTroopType($Type, $Quant = 0, $Custom = False, $bDonateAll = False)
 				If $iDonTroopsQuantity > 1 Then $plural = 1
 				If $bDonateAll Then $sTextToAll = " (to all requests)"
 				SetLog("Donating " & $iDonTroopsQuantity & " " & NameOfTroop($Type, $plural) & $sTextToAll, $COLOR_GREEN)
+				
 				If $debugOCRdonate = 1 then
 					Setlog("donate" , $color_RED)
 					Setlog("row: " & $donaterow, $color_RED)
@@ -551,22 +552,26 @@ Func DonateTroopType($Type, $Quant = 0, $Custom = False, $bDonateAll = False)
 				For $i = 0 To UBound($TroopName) - 1
 					If Eval("e" & $TroopName[$i]) = $Type Then
 						Assign("Don" & $TroopName[$i], Eval("Don" & $TroopName[$i]) + $Quant)
+						$iTotalDonateCapacity-= $TroopHeight[$i] * $Quant ; chalicucu update capacity for next donating troops
 					EndIf
 				Next
 				For $i = 0 To UBound($TroopDarkName) - 1
 					If Eval("e" & $TroopDarkName[$i]) = $Type Then
 						Assign("Don" & $TroopDarkName[$i], Eval("Don" & $TroopDarkName[$i]) + $Quant)
+						$iTotalDonateCapacity-= $TroopDarkHeight[$i] * $Quant ; chalicucu
 					EndIf
 				Next
 			Else
 				For $i = 0 To UBound($TroopName) - 1
 					If Eval("e" & $TroopName[$i]) = $Type Then
 						Assign("Don" & $TroopName[$i], Eval("Don" & $TroopName[$i]) + $iDonTroopsQuantity)
+						$iTotalDonateCapacity -= $TroopHeight[$i] * $iDonTroopsQuantity ; chalicucu
 					EndIf
 				Next
 				For $i = 0 To UBound($TroopDarkName) - 1
 					If Eval("e" & $TroopDarkName[$i]) = $Type Then
 						Assign("Don" & $TroopDarkName[$i], Eval("Don" & $TroopDarkName[$i]) + $iDonTroopsQuantity)
+						$iTotalDonateCapacity-= $TroopDarkHeight[$i] * $iDonTroopsQuantity ; chalicucu
 					EndIf
 				Next
 			EndIf

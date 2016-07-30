@@ -2244,6 +2244,23 @@ Func saveConfig() ;Saves the controls settings to the config
 	IniWriteS($config, "android", "adb.clicks.troop.deploy.size", $AndroidAdbClicksTroopDeploySize)
 	IniWriteS($config, "android", "no.focus.tampering", ($NoFocusTampering ? "1" : "0"))
 
+	; SmartZap Settings from ChaCalGyn (LunaEclipse) - DEMEN
+	If GUICtrlRead($chkSmartLightSpell) = $GUI_CHECKED Then
+		IniWrite($config, "SmartZap", "UseSmartZap", 1)
+	Else
+		IniWrite($config, "SmartZap", "UseSmartZap", 0)
+	EndIf
+	If GUICtrlRead($chkSmartZapDB) = $GUI_CHECKED Then
+		IniWrite($config, "SmartZap", "ZapDBOnly", 1)
+	Else
+		IniWrite($config, "SmartZap", "ZapDBOnly", 0)
+	EndIf
+	If GUICtrlRead($chkSmartZapSaveHeroes) = $GUI_CHECKED Then
+		IniWrite($config, "SmartZap", "THSnipeSaveHeroes", 1)
+	Else
+		IniWrite($config, "SmartZap", "THSnipeSaveHeroes", 0)
+	EndIf
+	IniWrite($config, "SmartZap", "MinDE", GUICtrlRead($txtMinDark))
 
 	If $hFile <> -1 Then FileClose($hFile)
 

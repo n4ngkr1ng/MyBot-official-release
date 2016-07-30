@@ -2360,10 +2360,52 @@ _GUICtrlComboBox_SetCurSel($cmbTHSnipeBeforeDBScript, _GUICtrlComboBox_FindStrin
 LoadABSnipeAttacks() ; recreate combo box values
 _GUICtrlComboBox_SetCurSel($cmbTHSnipeBeforeLBScript, _GUICtrlComboBox_FindStringExact($cmbTHSnipeBeforeLBScript, $THSnipeBeforeLBScript))
 
+; SmartZap from ChaCalGyn (LunaEclipse) - DEMEN
+	If $ichkSmartZap = 1 Then
+		GUICtrlSetState($chkSmartLightSpell, $GUI_CHECKED)
+		GUICtrlSetState($chkSmartZapDB, $GUI_ENABLE)
+		GUICtrlSetState($chkSmartZapSaveHeroes, $GUI_ENABLE)
+		GUICtrlSetState($txtMinDark, $GUI_ENABLE)
+	Else
+		GUICtrlSetState($chkSmartZapDB, $GUI_DISABLE)
+		GUICtrlSetState($chkSmartZapSaveHeroes, $GUI_DISABLE)
+		GUICtrlSetState($txtMinDark, $GUI_DISABLE)
+		GUICtrlSetState($chkSmartLightSpell, $GUI_UNCHECKED)
+	EndIf
+	If $ichkSmartZapDB = 1 Then
+		GUICtrlSetState($chkSmartZapDB, $GUI_CHECKED)
+	Else
+		GUICtrlSetState($chkSmartZapDB, $GUI_UNCHECKED)
+	EndIf
+	If $ichkSmartZapSaveHeroes = 1 Then
+		GUICtrlSetState($chkSmartZapSaveHeroes, $GUI_CHECKED)
+	Else
+		GUICtrlSetState($chkSmartZapSaveHeroes, $GUI_UNCHECKED)
+	EndIf
+	GUICtrlSetData($txtMinDark, $itxtMinDE)
 
+	;=> chalicucu & demen:  switchcocacc
+	If $ichkSwitchAcc = 1 Then
+	   GUICtrlSetState($chkSwitchAcc, $GUI_CHECKED)
+    Else
+	   GUICtrlSetState($chkSwitchAcc, $GUI_UNCHECKED)
+    EndIf
+	If $AccRelaxTogether = 1 Then
+	   GUICtrlSetState($chkAccRelax, $GUI_CHECKED)
+    Else
+	   GUICtrlSetState($chkAccRelax, $GUI_UNCHECKED)
+    EndIf
+	If $iChkAtkPln Then
+	   GUICtrlSetState($chkAtkPln, $GUI_CHECKED)
+	Else
+	   GUICtrlSetState($chkAtkPln, $GUI_UNCHECKED)
+	EndIf
 
-
-
+	GUICtrlSetData($txtTotalCoCAcc, IniRead($profile, "switchcocacc" , "totalacc" ,"0"))
+	GUICtrlSetData($txtAccBottingOrder, IniRead($profile, "switchcocacc" , "order" ,"123"))
+	GUICtrlSetData($txtProfileIdxOrder, IniRead($profile, "switchcocacc" , "profile" ,"123"))
+	_GUICtrlComboBox_SetCurSel($cmbSwitchMode, $iSwitchMode)
+	;<= switchcocacc
 
 	; Reenabling window redraw
 	If $bRedrawAtExit Then SetRedrawBotWindow(True)

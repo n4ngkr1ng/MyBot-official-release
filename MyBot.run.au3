@@ -163,6 +163,8 @@ SetDebugLog("MyBot.run launch time " & Round($iBotLaunchTime) & " ms.")
 
 ;~ Restore process priority
 ProcessSetPriority(@AutoItPID, $iBotProcessPriority)
+InitOrder()		;chalicucu init SwitchCOCAcc
+AccStatInit()	;chalicucu init stats [SwitchCOCAcc]
 
 ;AutoStart Bot if request
 AutoStart()
@@ -183,11 +185,27 @@ BotClose()
 Func runBot() ;Bot that runs everything in order
 	$TotalTrainedTroops = 0
 	Local $Quickattack = False
+	If $ichkSwitchAcc = 1 Then
+		RequestCC()		;Chalicucu
+		;Train()			;Chalicucu
+		SwitchCOCAcc(True)	;Chalicucu, first match acc and profile
+	EndIf
 	While 1
 		$Restart = False
 		$fullArmy = False
 		$CommandStop = -1
 		If _Sleep($iDelayRunBot1) Then Return
+		If GotoAttack() = False And $CommandStop <> 0 Then    ;Chalicucu not start emulator. relax
+            If $ichkSwitchAcc=1 And $AccRelaxTogether = 1 Then
+				CloseAndroid()
+				SetLog("Relax! Attack not planned...",$COLOR_RED)
+				If _Sleep(300000) Then Return
+				ContinueLoop   
+			ElseIf $ichkSwitchAcc = 1 Then
+				SwitchCOCAcc()
+				If _Sleep(20000) Then Return
+			EndIf
+        EndIf
 		checkMainScreen()
 		If $Restart = True Then ContinueLoop
 		chkShieldStatus()
@@ -288,7 +306,11 @@ Func runBot() ;Bot that runs everything in order
 			   UpgradeWall()
 			   If _Sleep($iDelayRunBot3) Then Return
 			   If $Restart = True Then ContinueLoop
-			   Idle()
+			   ;Chalicucu change Idle()
+				If Idle()= 1 Then 
+					$Quickattack = False
+					ContinueLoop
+				EndIf
 			   ;$fullArmy1 = $fullArmy
 			   If _Sleep($iDelayRunBot3) Then Return
 			   If $Restart = True Then ContinueLoop
@@ -342,12 +364,60 @@ EndFunc   ;==>runBot
 Func Idle() ;Sequence that runs until Full Army
 	Local $TimeIdle = 0 ;In Seconds
 	;If $debugsetlog = 1 Then SetLog("Func Idle ", $COLOR_PURPLE)
-	While $fullArmy = False Or $bFullArmyHero = False
+	While $fullArmy = False Or $bFullArmyHero = False Or $CommandStop = 0       ;Chalicucu add CommandStop
 		checkAndroidTimeLag()
 
 		If $RequestScreenshot = 1 Then PushMsg("RequestScreenshot")
 		If _Sleep($iDelayIdle1) Then Return
-		If $CommandStop = -1 Then SetLog("====== Waiting for full army ======", $COLOR_GREEN)
+		;If $CommandStop = -1 Then SetLog("====== Waiting for full army ======", $COLOR_GREEN)
+		If $CommandStop = -1 Or ($ichkSwitchAcc = 1 And $CommandStop = 0) Then 	;Chalicucu
+            SetLog("====== Waiting for full army ======", $COLOR_GREEN)
+            ;If $ichkSwitchAcc = 1 And ((($CurCamp/$TotalCamp)*100) < 88 Or $CommandStop = 0) Then    ;Chalicucu
+            If $ichkSwitchAcc = 1 And ($iRemainTrainTime > 2 Or $CommandStop = 0) Then    ;Chalicucu
+                RequestCC()
+				If _Sleep(1000) Then Return
+				SetLog("====== Switching COC account ======", $COLOR_GREEN)
+				If $CommandStop <> 0 And $iSwitchMode = 0 Then
+					Local $lRemainTrainTime = RemainTrainTime(True, False, True)
+					SetLog("Before leaving. Training remain: " & $lRemainTrainTime & " minute(s)", $COLOR_GREEN)
+					If $lRemainTrainTime >= 0 Then 
+						$iRemainTrainTime = $lRemainTrainTime
+						SetCurTrainTime($iRemainTrainTime)
+					EndIf
+					ClickP($aAway, 1, 0, "#0167") ;Click Away
+				EndIf
+
+				If SwitchCOCAcc() Then     ;Chalicucu switch COC acc
+					;_RunFunction("DonateCC,Train")
+					checkMainScreen(True)
+					; If $CommandStop = 0 Then DonateCC()
+					Train()
+					;If $CommandStop <> 0 And ($CurCamp/$TotalCamp)*100 < 96 Then		;new village camp
+					If $CommandStop <> 0 And $iRemainTrainTime > 0 Then		;new village camp
+						CloseCOC()
+						If $iRemainTrainTime < 3 Then
+							SetLog("====== Sleeping " & $iRemainTrainTime & " minutes and wait to attack ======", $COLOR_GREEN)
+							If _Sleep($iRemainTrainTime * 60000) Then Return
+						Else
+							If $iSwitchMode = 0 And $CommandStop <>  0 And $iSwitchCnt > $CoCAccNo Then
+								SetLog("====== Sleeping " & ($iRemainTrainTime - 2) & " minutes ======", $COLOR_GREEN)
+								If _Sleep(($iRemainTrainTime - 2) * 60000) Then Return		;turn back before 2 minutes to donation, fill army ... then attack
+							Else
+								SetLog("====== Sleeping 2 minutes ======", $COLOR_GREEN)
+								If _Sleep(120000) Then Return
+							EndIf
+						EndIf
+						OpenCOC()
+					Else
+						If _Sleep(2000) Then Return
+					EndIf
+					Return 1
+				EndIf
+            Else
+                If _Sleep(30000) Then Return
+            EndIf
+        EndIf
+		
 		Local $hTimer = TimerInit()
 		Local $iReHere = 0
 
@@ -474,6 +544,7 @@ Func AttackMain() ;Main control for attack functions
 		Else
 			Setlog("No one of search condition match: (wait troops and/or heroes according to search settings)", $COLOR_BLUE)
 			Setlog(" - wait troops and/or heroes according to search settings", $COLOR_BLUE)
+			BotCommand()			;Chalicucu
 		EndIf
 	Else
 		SetLog("Attacking Not Planned, Skipped..", $COLOR_RED)
@@ -529,13 +600,20 @@ Func QuickAttack()
 EndFunc
 
 Func GotoAttack()
-
+	 If Not $iChkAtkPln Then Return True		;Chalicucu disable attack plan (can use with switch accounts)
 	 If $iPlannedAttackWeekDays[@WDAY - 1] = 1 Then
 		Local $hour = StringSplit(_NowTime(4), ":", $STR_NOCOUNT)
 		$hourLoot = $hour[0]
 		If $iPlannedattackHours[$hourLoot] = 1 Then
 			Return True
 		Else
+			If $iAtkPlan_HalfHour Then	; Chalicucu attack more half hour
+				If $hourLoot >0 Then
+					If $hour[1] < 30 And $iPlannedattackHours[$hourLoot -1] = 1 Then Return True
+				ElseIf $hour[1] < 30 And $iPlannedattackHours[23 - 1] = 1 Then 
+					 Return True
+				EndIf
+			EndIf
 			Return False
 		EndIf
 	 Else
@@ -602,3 +680,8 @@ Func _RunFunction($action)
 	EndSwitch
 	SetDebugLog("_RunFunction: " & $action & " END")
 EndFunc   ;==>_RunFunction
+
+Func myHide()   ;Chalicucu hide BS
+    $Hide = False   
+    btnHide()
+EndFunc     ;==>myHide

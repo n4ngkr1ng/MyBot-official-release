@@ -114,6 +114,7 @@
 #include "functions\CreateArmy\TrainClick.au3"
 #include "functions\CreateArmy\Train.au3"
 #include "functions\CreateArmy\TrainIt.au3"
+#include "functions\CreateArmy\RemainTrainTime.au3"		;chalicucu add
 
 
 #include "functions\Image Search\ImageSearch.au3"
@@ -145,6 +146,10 @@
 #include "functions\Android\AndroidMEmu.au3"
 #include "functions\Android\AndroidNox.au3"
 #include "functions\Android\getBSPos.au3"
+
+; SmartZap files - from ChaCalGyn (LunaEclipse) - DEMEN
+#include "functions\Mod\drillSearch.au3"
+#include "functions\Mod\smartZap.au3"
 
 #include "functions\Other\WerFaultClose.au3"
 #include "functions\Other\_NumberFormat.au3"
@@ -251,3 +256,4 @@
 #include "functions\Village\UpgradeHeroes.au3"
 #include "functions\Village\ClanLevel.au3"
 #include "functions\Village\StarBonus.au3"
+#include "functions\Village\SwitchCOCAcc.au3"		; Chalicucu Switch COC account

@@ -1423,13 +1423,85 @@ Global $SecondaryOutputFile = ""
 Global $quicklyfirststart = true
 Global $configLoaded = false
 
-
 Global $chkMakeIMGCSV
 
+; SmartZap GUI variables from ChaCalGyn (LunaEclipse) - DEMEN
+Global $ichkSmartZap = 1
+Global $ichkSmartZapDB = 1
+Global $ichkSmartZapSaveHeroes = 1
+Global $itxtMinDE = 300
+
+; SmartZap stats from ChaCalGyn (LunaEclipse) - DEMEN
+Global $smartZapGain = 0
+Global $numLSpellsUsed = 0
+
+; SmartZap Array to hold Total Amount of DE available from Drill at each level (1-6) from ChaCalGyn (LunaEclipse) - DEMEN
+Global Const $drillLevelHold[6] = [	120, _
+												225, _
+												405, _
+												630, _
+												960, _
+												1350]
+
+; SmartZap Array to hold Amount of DE available to steal from Drills at each level (1-6) from ChaCalGyn (LunaEclipse) - DEMEN
+Global Const $drillLevelSteal[6] = [59, _
+                                    102, _
+												172, _
+												251, _
+												343, _
+												479]
 
 ;TH Snipe Before Attack
 Global $THSnipeBeforeDBEnable = 0 , $THSnipeBeforeLBEnable = 0
 Global $THSnipeBeforeDBTiles = 0 , $THSnipeBeforeLBTiles = 0
 Global $THSnipeBeforeDBScript = 0 , $THSnipeBeforeLBScript = 0
 
+;=> *********** [Chalicucu] Switch COC account ************************************
+Global $nTotalCOCAcc	; up to 8		;Number of Google+ accounts on emulator
+Global $CoCAccNo
+Global $profile = $sProfilePath & "\profile.ini"
+$nTotalCOCAcc = Int(Iniread($profile, "switchcocacc", "totalacc", "0"))
+If $nTotalCOCAcc = 0 Then
+	SetLog("---------------Switch CoC Accounts ---------------", $COLOR_RED)
+	SetLog("Set up your total google account first!", $COLOR_RED)
+	SetLog("------------------------------------------------------", $COLOR_RED)
+	$nTotalCOCAcc = 8
+EndIf
+Global $ichkSwitchAcc = Int(IniRead($profile, "switchcocacc" , "Enable" ,"1"))
+Global $nCurCOCAcc = 1     ;Chalicucu Current COC account index : 1 of 3 acc
+Global $nCurStep = -1
+Global $anCOCAccIdx[$CoCAccNo]		; = [1, 3, 2]       ; 1->3->2->1	; Account walking step
+Global $anBotProfileIdx[$nTotalCOCAcc]; = [1, 2, 3]		;	bot profile index correspond to COC account
+;InitOrder()
+;Training progress for accounts
+Global $AccDonBarb[$nTotalCOCAcc], $AccDonArch[$nTotalCOCAcc], $AccDonGiant[$nTotalCOCAcc], $AccDonGobl[$nTotalCOCAcc], $AccDonWall[$nTotalCOCAcc], $AccDonBall[$nTotalCOCAcc], $AccDonWiza[$nTotalCOCAcc], $AccDonHeal[$nTotalCOCAcc]
+Global $AccDonMini[$nTotalCOCAcc], $AccDonHogs[$nTotalCOCAcc], $AccDonValk[$nTotalCOCAcc], $AccDonGole[$nTotalCOCAcc], $AccDonWitc[$nTotalCOCAcc], $AccDonLava[$nTotalCOCAcc], $AccDonDrag[$nTotalCOCAcc], $AccDonPekk[$nTotalCOCAcc]
+Global $AccBarbComp[$nTotalCOCAcc], $AccArchComp[$nTotalCOCAcc], $AccGoblComp[$nTotalCOCAcc], $AccGiantComp[$nTotalCOCAcc], $AccWallComp[$nTotalCOCAcc], $AccWizaComp[$nTotalCOCAcc], $AccMiniComp[$nTotalCOCAcc], $AccHogsComp[$nTotalCOCAcc]
+Global $AccDragComp[$nTotalCOCAcc], $AccBallComp[$nTotalCOCAcc], $AccPekkComp[$nTotalCOCAcc], $AccHealComp [$nTotalCOCAcc], $AccValkComp[$nTotalCOCAcc], $AccGoleComp[$nTotalCOCAcc], $AccWitcComp[$nTotalCOCAcc], $AccLavaComp[$nTotalCOCAcc]
+Global $AccCurBarb[$nTotalCOCAcc],  $AccCurArch[$nTotalCOCAcc],  $AccCurGiant[$nTotalCOCAcc], $AccCurGobl[$nTotalCOCAcc],  $AccCurWall[$nTotalCOCAcc],  $AccCurBall[$nTotalCOCAcc],  $AccCurWiza[$nTotalCOCAcc],  $AccCurHeal[$nTotalCOCAcc]
+Global $AccCurMini[$nTotalCOCAcc],  $AccCurHogs[$nTotalCOCAcc],  $AccCurValk[$nTotalCOCAcc], $AccCurGole[$nTotalCOCAcc],  $AccCurWitc[$nTotalCOCAcc],  $AccCurLava[$nTotalCOCAcc],  $AccCurDrag[$nTotalCOCAcc],  $AccCurPekk[$nTotalCOCAcc]
+Global $AccFirstStart[$nTotalCOCAcc]
+Global $AccTotalTrainedTroops[$nTotalCOCAcc]
 
+Global $AccRelaxTogether = Iniread($profile, "switchcocacc", "AttackRelax", 1)
+Global $iChkAtkPln = (Number(Iniread($profile, "switchcocacc", "CheckAtkPln", 1)) = 1)
+
+Global $iAccGoldStart[$nTotalCOCAcc], $iAccElixirStart[$nTotalCOCAcc], $iAccDarkStart[$nTotalCOCAcc], $iAccTrophyStart[$nTotalCOCAcc]
+Global $iAccAttacked[$nTotalCOCAcc], $iAccSkippedCount[$nTotalCOCAcc]
+Global $AccStatFlg[$nTotalCOCAcc]
+
+Global $iSwitchMode = Iniread($profile, "switchcocacc", "SwitchMode", 0)		;0: shortest training mode (STM), 1: fixed order mode
+Global $iRemainTrainTime = 0	;remain train time of current account
+
+;STM mode control
+Global $aTimerStart[1]		;tracing start training time
+Global $accTrainTime[1]		;Remain train time of attacking account
+Global $accDonate[1] = [-1]	;donation list
+Global $accAttack[1] = [-1]	;attacking list
+Global $nCurAtkIdx = 0		;current attack index
+Global $nLastDonAcc = 0		;last donate account
+Global $iSwitchCnt = 0		;counting switching time to identify next switching step
+
+;<= *********** [Chalicucu] Switch COC account ************************************
+
+Global $iAtkPlan_HalfHour = True		;Chalicucu, attack more half hour in attack plan

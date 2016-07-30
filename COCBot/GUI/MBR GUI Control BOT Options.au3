@@ -379,4 +379,45 @@ Func btnTestAttackBar()
 		$RunState = $currentRunState
 EndFunc
 
+; Demen & chalicucu Switch Account
+Func chkSwitchAcc()
+	If GUICtrlRead($chkSwitchAcc) = $GUI_CHECKED Then
+		$ichkSwitchAcc = 1
+	Else
+		$ichkSwitchAcc = 0
+	EndIf
+	IniWrite($profile, "switchcocacc", "Enable", $ichkSwitchAcc)
+EndFunc   ;==>chkSwitchAcc
 
+Func chkAccRelaxTogether()	;chalicucu
+	If GUICtrlRead($chkAccRelax) = $GUI_CHECKED Then
+		$AccRelaxTogether = 1
+	Else
+		$AccRelaxTogether = 0
+	EndIf
+	IniWrite($profile, "switchcocacc", "AttackRelax", $AccRelaxTogether)
+EndFunc   ;==>chkAccRelaxTogether
+
+Func chkAtkPln()	;chalicucu enable/disable attack plan
+	Local $cfg
+	If GUICtrlRead($chkAtkPln) = $GUI_CHECKED Then
+		$iChkAtkPln = True
+		$cfg = 1
+	Else
+		$iChkAtkPln = False
+		$cfg = 0
+	EndIf
+	IniWrite($profile, "switchcocacc", "CheckAtkPln", $cfg)
+EndFunc   ;==>chkAtkPln
+
+Func cmbSwitchMode()		;chalicucu switch account mode
+	Switch _GUICtrlComboBox_GetCurSel($cmbSwitchMode)
+		Case 0 	; shortest training mode
+			$iSwitchMode = 0
+		Case 1	; ordered mode
+			$iSwitchMode = 1
+		Case 2	; random mode
+			$iSwitchMode = 2
+	EndSwitch
+	IniWrite($profile, "switchcocacc", "SwitchMode", $iSwitchMode)
+EndFunc   ;==> cmbSwitchMode

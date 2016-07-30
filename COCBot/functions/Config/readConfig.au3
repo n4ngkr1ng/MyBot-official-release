@@ -1022,6 +1022,11 @@ Func readConfig($inputfile = $config, $partial = False) ;Reads config and sets i
 		$AndroidAdbClicksTroopDeploySize = Int(IniRead($config, "android", "adb.clicks.troop.deploy.size", $AndroidAdbClicksTroopDeploySize))
 		$NoFocusTampering = IniRead($config, "android", "no.focus.tampering", ($NoFocusTampering ? "1" : "0")) = "1"
 
+		; SmartZap from ChaCalGyn (LunaEclipse) - DEMEN
+		$ichkSmartZap = IniRead($config, "SmartZap", "UseSmartZap", "1")
+		$ichkSmartZapDB = IniRead($config, "SmartZap", "ZapDBOnly", "1")
+		$ichkSmartZapSaveHeroes = IniRead($config, "SmartZap", "THSnipeSaveHeroes", "1")
+		$itxtMinDE = IniRead($config, "SmartZap", "MinDE", "300")
 	Else
 		Return False
 	EndIf
