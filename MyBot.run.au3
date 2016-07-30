@@ -200,7 +200,7 @@ Func runBot() ;Bot that runs everything in order
 				CloseAndroid()
 				SetLog("Relax! Attack not planned...",$COLOR_RED)
 				If _Sleep(300000) Then Return
-				ContinueLoop   
+				ContinueLoop
 			ElseIf $ichkSwitchAcc = 1 Then
 				SwitchCOCAcc()
 				If _Sleep(20000) Then Return
@@ -307,7 +307,7 @@ Func runBot() ;Bot that runs everything in order
 			   If _Sleep($iDelayRunBot3) Then Return
 			   If $Restart = True Then ContinueLoop
 			   ;Chalicucu change Idle()
-				If Idle()= 1 Then 
+				If Idle()= 1 Then
 					$Quickattack = False
 					ContinueLoop
 				EndIf
@@ -380,7 +380,7 @@ Func Idle() ;Sequence that runs until Full Army
 				If $CommandStop <> 0 And $iSwitchMode = 0 Then
 					Local $lRemainTrainTime = RemainTrainTime(True, False, True)
 					SetLog("Before leaving. Training remain: " & $lRemainTrainTime & " minute(s)", $COLOR_GREEN)
-					If $lRemainTrainTime >= 0 Then 
+					If $lRemainTrainTime >= 0 Then
 						$iRemainTrainTime = $lRemainTrainTime
 						SetCurTrainTime($iRemainTrainTime)
 					EndIf
@@ -417,7 +417,7 @@ Func Idle() ;Sequence that runs until Full Army
                 If _Sleep(30000) Then Return
             EndIf
         EndIf
-		
+
 		Local $hTimer = TimerInit()
 		Local $iReHere = 0
 
@@ -610,7 +610,7 @@ Func GotoAttack()
 			If $iAtkPlan_HalfHour Then	; Chalicucu attack more half hour
 				If $hourLoot >0 Then
 					If $hour[1] < 30 And $iPlannedattackHours[$hourLoot -1] = 1 Then Return True
-				ElseIf $hour[1] < 30 And $iPlannedattackHours[23 - 1] = 1 Then 
+				ElseIf $hour[1] < 30 And $iPlannedattackHours[23 - 1] = 1 Then
 					 Return True
 				EndIf
 			EndIf
@@ -680,8 +680,3 @@ Func _RunFunction($action)
 	EndSwitch
 	SetDebugLog("_RunFunction: " & $action & " END")
 EndFunc   ;==>_RunFunction
-
-Func myHide()   ;Chalicucu hide BS
-    $Hide = False   
-    btnHide()
-EndFunc     ;==>myHide
