@@ -41,10 +41,7 @@ Func CreateAttackLogFile()
 		FileClose($hAttackLogFileHandle)
 		$hAttackLogFileHandle = ""
 	EndIf
-	;$dirLogs = $sProfilePath & "\Logs\"		;chalicucu
-	;$dirLogs = @ScriptDir & "\Logs\"		;chalicucu
-	;$sAttackLogFName = "AttackLog" & "-" & @YEAR & "-" & @MON & ".log"
-	$sAttackLogFName = "AttackLog" & "-AC" & $nCurCOCAcc & "-" & @YEAR & "-" & @MON & ".log"
+	$sAttackLogFName = "AttackLog" & "-" & @YEAR & "-" & @MON & ".log"
 	$sAttackLogPath = $dirLogs & $sAttackLogFName
 	$hAttackLogFileHandle = FileOpen($sAttackLogPath, $FO_APPEND)
 EndFunc   ;==>CreateAttackLogFile

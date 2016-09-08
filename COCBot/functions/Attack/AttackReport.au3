@@ -128,6 +128,37 @@ Func AttackReport()
 				$LeagueShort = $League[0][3]
 			EndIf
 		EndIf
+		;Display League in Stats ==>
+		GUICtrlSetData($lblLeague, "")
+
+		If StringInStr($LeagueShort, "1") > 1 Then
+			GUICtrlSetData($lblLeague, "1")
+		ElseIf StringInStr($LeagueShort, "2") > 1 Then
+			GUICtrlSetData($lblLeague, "2")
+		ElseIf StringInStr($LeagueShort, "3") > 1 Then
+			GUICtrlSetData($lblLeague, "3")
+		EndIf
+		_GUI_Value_STATE("HIDE",$groupLeague)
+		If StringInStr($LeagueShort, "B") > 0 Then
+			GUICtrlSetState($BronzeLeague,$GUI_SHOW)
+		ElseIf StringInStr($LeagueShort, "S") > 0 Then
+			GUICtrlSetState($SilverLeague,$GUI_SHOW)
+		ElseIf StringInStr($LeagueShort, "G") > 0 Then
+			GUICtrlSetState($GoldLeague,$GUI_SHOW)
+		ElseIf StringInStr($LeagueShort, "c") > 0 Then
+			GUICtrlSetState($CrystalLeague,$GUI_SHOW)
+		ElseIf StringInStr($LeagueShort, "M") > 0 Then
+			GUICtrlSetState($MasterLeague,$GUI_SHOW)
+		ElseIf StringInStr($LeagueShort, "C") > 0 Then
+			GUICtrlSetState($ChampionLeague,$GUI_SHOW)
+		ElseIf StringInStr($LeagueShort, "T") > 0 Then
+			GUICtrlSetState($TitanLeague,$GUI_SHOW)
+		ElseIf StringInStr($LeagueShort, "LE") > 0 Then
+			GUICtrlSetState($LegendLeague,$GUI_SHOW)
+		Else
+			GUICtrlSetState($UnrankedLeague,$GUI_SHOW)
+		EndIf
+		;==> Display League in Stats
 	Else
 		$iGoldLastBonus = 0
 		$iElixirLastBonus = 0
@@ -145,7 +176,7 @@ Func AttackReport()
 	Local $AtkLogTxt
 	;$AtkLogTxt = "" & _NowTime(4) & "|"
 	;Chalicucu
-	$AtkLogTxt = String($nCurCOCAcc) & " |" & String(_NowTime(4)) & "|"  ; adding Acc No. in Attack Log - SwitchAcc - DEMEN
+	$AtkLogTxt = String($nCurCOCAcc) & " |" & String(_NowTime(4)) & "|"
 	$AtkLogTxt &= StringFormat("%5d", $iTrophyCurrent) & "|"
 	$AtkLogTxt &= StringFormat("%6d", $SearchCount) & "|"
 	$AtkLogTxt &= StringFormat("%7d", $iGoldLast) & "|"
@@ -178,17 +209,17 @@ Func AttackReport()
 		EndIf
 	EndIf
 
-    If $FirstAttack = 0 Then $FirstAttack = 1
+	If $FirstAttack = 0 Then $FirstAttack = 1
 	$iGoldTotal += $iGoldLast + $iGoldLastBonus
-	$aGoldTotalAcc[$nCurProfile-1] += $iGoldLast + $iGoldLastBonus ; Separate Stats per Each Account - SwitchAcc Mode - DEMEN
+	If $ichkSwitchAcc = 1 Then $aGoldTotalAcc[$nCurCOCAcc - 1] += $iGoldLast + $iGoldLastBonus ; Separate Stats per Each Account - SwitchAcc Mode - DEMEN
 	$iTotalGoldGain[$iMatchMode] += $iGoldLast + $iGoldLastBonus
 	$iElixirTotal += $iElixirLast + $iElixirLastBonus
-	$aElixirTotalAcc[$nCurProfile-1] += $iElixirLast + $iElixirLastBonus ; Separate Stats per Each Account - SwitchAcc Mode - DEMEN
 	$iTotalElixirGain[$iMatchMode] += $iElixirLast + $iElixirLastBonus
+	If $ichkSwitchAcc = 1 Then $aElixirTotalAcc[$nCurCOCAcc - 1] += $iElixirLast + $iElixirLastBonus ; Separate Stats per Each Account - SwitchAcc Mode - DEMEN
 	If $iDarkStart <> "" Then
 		$iDarkTotal += $iDarkLast + $iDarkLastBonus
-		$aDarkTotalAcc[$nCurProfile-1] += $iDarkLast + $iDarkLastBonus ; Separate Stats per Each Account - SwitchAcc Mode - DEMEN
 		$iTotalDarkGain[$iMatchMode] += $iDarkLast + $iDarkLastBonus
+		If $ichkSwitchAcc = 1 Then $aDarkTotalAcc[$nCurCOCAcc - 1] += $iDarkLast + $iDarkLastBonus ; Separate Stats per Each Account - SwitchAcc Mode - DEMEN
 	EndIf
 	$iTrophyTotal += $iTrophyLast
 	$iTotalTrophyGain[$iMatchMode] += $iTrophyLast
@@ -200,7 +231,6 @@ Func AttackReport()
 		EndIf
 	EndIf
 	$iAttackedVillageCount[$iMatchMode] += 1
-	$aAttackedCountAcc[$nCurProfile-1] += 1 ; SwitchAcc Mod - DEMEN
 	UpdateStats()
 
 EndFunc   ;==>AttackReport

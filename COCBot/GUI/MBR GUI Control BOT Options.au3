@@ -57,6 +57,23 @@ Func cmbLanguage()
 	MsgBox("", "", GetTranslated(636, 71, "Restart Bot to load program with new language:") & " " & $aLanguageFile[$sLanguageIndex][1] & " (" & $sLanguage & ")")
 EndFunc   ;==>cmbLanguage
 
+Func chkUseRandomClick()
+	If GUICtrlRead($chkUseRandomClick) = $GUI_CHECKED Then
+		$iUseRandomClick = 1
+	Else
+		$iUseRandomClick = 0
+	EndIf
+EndFunc   ;==>chkUseRandomClick
+
+Func chkUpdatingWhenMinimized()
+	$iUpdatingWhenMinimized = (GUICtrlRead($chkUpdatingWhenMinimized) = $GUI_CHECKED ? 1 : 0)
+EndFunc   ;==>chkUpdatingWhenMinimized
+
+Func chkHideWhenMinimized()
+	$iHideWhenMinimized = (GUICtrlRead($chkHideWhenMinimized) = $GUI_CHECKED ? 1 : 0)
+	TrayItemSetState($tiHide, ($iHideWhenMinimized = 1 ? $TRAY_CHECKED : $TRAY_UNCHECKED))
+EndFunc   ;==>chkHideWhenMinimized
+
 Func chkScreenshotType()
 	If GUICtrlRead($chkScreenshotType) = $GUI_CHECKED Then
 		$iScreenshotType = 1
@@ -219,65 +236,12 @@ Func chkdebugOCRDonate()
 	SetDebugLog("chkdebugOCRDonate " & ($debugOCRdonate = 1 ? "enabled" : "disabled"))
 EndFunc   ;==>chkdebugOCRDonate
 
-Func sldMaxVSDelay()
-	$iMaxVSDelay = GUICtrlRead($sldMaxVSDelay)
-	GUICtrlSetData($lblMaxVSDelay, $iMaxVSDelay)
-	If $iMaxVSDelay < $iVSDelay Then
-		GUICtrlSetData($lblVSDelay, $iMaxVSDelay)
-		GUICtrlSetData($sldVSDelay, $iMaxVSDelay)
-		$iVSDelay = $iMaxVSDelay
-	EndIf
-	If $iVSDelay = 1 Then
-		GUICtrlSetData($lbltxtVSDelay, GetTranslated(603,7, "second"))
-	Else
-		GUICtrlSetData($lbltxtVSDelay, GetTranslated(603,8, "seconds"))
-	EndIf
-	If $iMaxVSDelay = 1 Then
-		GUICtrlSetData($lbltxtMaxVSDelay, GetTranslated(603,7, "second"))
-	Else
-		GUICtrlSetData($lbltxtMaxVSDelay, GetTranslated(603,8, "seconds"))
-	EndIf
-EndFunc   ;==>sldMaxVSDelay
-
-Func sldVSDelay()
-	$iVSDelay = GUICtrlRead($sldVSDelay)
-	GUICtrlSetData($lblVSDelay, $iVSDelay)
-	If $iVSDelay > $iMaxVSDelay Then
-		GUICtrlSetData($lblMaxVSDelay, $iVSDelay)
-		GUICtrlSetData($sldMaxVSDelay, $iVSDelay)
-		$iMaxVSDelay = $iVSDelay
-	EndIf
-	If $iVSDelay = 1 Then
-		GUICtrlSetData($lbltxtVSDelay, GetTranslated(603,7, "second"))
-	Else
-		GUICtrlSetData($lbltxtVSDelay, GetTranslated(603,8, "seconds"))
-	EndIf
-	If $iMaxVSDelay = 1 Then
-		GUICtrlSetData($lbltxtMaxVSDelay, GetTranslated(603,7, "second"))
-	Else
-		GUICtrlSetData($lbltxtMaxVSDelay, GetTranslated(603,8, "seconds"))
-	EndIf
-EndFunc   ;==>sldVSDelay
-
-
-Func sldTrainITDelay()
-	$isldTrainITDelay = GUICtrlRead($sldTrainITDelay)
-	GUICtrlSetData($lbltxtTrainITDelay, GetTranslated(636, 32, "delay") & " " & $isldTrainITDelay & " ms.")
-EndFunc   ;==>sldTrainITDelay
-
-#cs
-	Func cmbGUIstyle()
-	MsgBox("", "", GetTranslated(636, 71, "Restart Bot to load new GUI style"))
-	EndFunc   ;==>cmbGUIstyle
-#ce
-
-
 Func btnTestTrain()
 		Local $currentOCR = $debugOcr
 		Local $currentRunState = $RunState
 		_GUICtrlTab_ClickTab($tabMain, 0)
 		$debugOcr = 1
-		$RunState = 1
+		$RunState = True
  		ForceCaptureRegion()
 		DebugImageSave("train_")
 		SetLog(_PadStringCenter(" Test Train begin (" & $sBotVersion &  ")", 54, "="), $COLOR_BLUE)
@@ -293,15 +257,13 @@ Func btnTestTrain()
 		$RunState = $currentRunState
 EndFunc
 
-
-
 Func btnTestDonateCC()
 		Local $currentOCR = $debugOcr
 		Local $currentRunState = $RunState
 		Local $currentSetlog = $debugsetlog
 		_GUICtrlTab_ClickTab($tabMain, 0)
 		$debugOcr = 1
-		$RunState = 1
+		$RunState = True
 		$debugsetlog = 1
  		ForceCaptureRegion()
 		;DebugImageSave("donateCC_")
@@ -320,9 +282,9 @@ Func btnTestDonateCC()
 			Return False
 		EndIf
 		Setlog("Detecting Troops...")
-		DetectSlotTroop($eLava)
+		DetectSlotTroop($eBowl)
 		Setlog("Detecting Spells...")
-		DetectSlotTroop($eHaSpell)
+		DetectSlotTroop($eSkSpell)
 		SetLog(_PadStringCenter(" Test DonateCC end ", 54, "="), $COLOR_BLUE)
 		Run("Explorer.exe " & $LibDir & "\debug\ocr\" )
 
@@ -338,7 +300,7 @@ Func btnTestAttackBar()
 		_GUICtrlTab_ClickTab($tabMain, 0)
 
 		$debugOcr = 1
-		$RunState = 1
+		$RunState = True
  		ForceCaptureRegion()
 		SetLog(_PadStringCenter(" Test Attack Bar begin (" & $sBotVersion &  ")", 54, "="), $COLOR_BLUE)
 
@@ -379,45 +341,64 @@ Func btnTestAttackBar()
 		$RunState = $currentRunState
 EndFunc
 
-; Demen & chalicucu Switch Account
-Func chkSwitchAcc()
-	If GUICtrlRead($chkSwitchAcc) = $GUI_CHECKED Then
-		$ichkSwitchAcc = 1
-	Else
-		$ichkSwitchAcc = 0
-	EndIf
-	IniWrite($profile, "switchcocacc", "Enable", $ichkSwitchAcc)
-EndFunc   ;==>chkSwitchAcc
 
-Func chkAccRelaxTogether()	;chalicucu
-	If GUICtrlRead($chkAccRelax) = $GUI_CHECKED Then
-		$AccRelaxTogether = 1
-	Else
-		$AccRelaxTogether = 0
-	EndIf
-	IniWrite($profile, "switchcocacc", "AttackRelax", $AccRelaxTogether)
-EndFunc   ;==>chkAccRelaxTogether
+Func btnTestClickDrag()
 
-Func chkAtkPln()	;chalicucu enable/disable attack plan
-	Local $cfg
-	If GUICtrlRead($chkAtkPln) = $GUI_CHECKED Then
-		$iChkAtkPln = True
-		$cfg = 1
-	Else
-		$iChkAtkPln = False
-		$cfg = 0
-	EndIf
-	IniWrite($profile, "switchcocacc", "CheckAtkPln", $cfg)
-EndFunc   ;==>chkAtkPln
+	Local $i
 
-Func cmbSwitchMode()		;chalicucu switch account mode
-	Switch _GUICtrlComboBox_GetCurSel($cmbSwitchMode)
-		Case 0 	; shortest training mode
-			$iSwitchMode = 0
-		Case 1	; ordered mode
-			$iSwitchMode = 1
-		Case 2	; random mode
-			$iSwitchMode = 2
-	EndSwitch
-	IniWrite($profile, "switchcocacc", "SwitchMode", $iSwitchMode)
-EndFunc   ;==> cmbSwitchMode
+	SetLog("Testing Click drag functionality...", $COLOR_BLUE)
+	For $i = 0 To 4
+		SetLog("Click x1/y1=100/600 and drag to x2/y2=150/600", $COLOR_BLUE)
+		ClickDrag(100, 600, 150, 600)
+	Next
+	SetDebugLog("Waiting 3 Seconds...")
+	_SleepStatus(3000, True, True, False)
+	For $i = 0 To 4
+		SetLog("Click x1/y1=150/600 and drag to x2/y2=100/600", $COLOR_BLUE)
+		ClickDrag(150, 600, 100, 600)
+	Next
+
+EndFunc
+
+Func btnTestImage()
+
+	Local $sImageFile = FileOpenDialog("Select CoC screenshot to test", $dirTemp, "Image (*.png)", $FD_FILEMUSTEXIST, "", $frmBot)
+
+	SetLog("Testing image " & $sImageFile, $COLOR_BLUE)
+
+	Local $currentRunState = $RunState
+	$RunState = True
+
+	; load test image
+	Local $hBMP = _GDIPlus_BitmapCreateFromFile($sImageFile)
+	Local $hHBMP = _GDIPlus_BitmapCreateDIBFromBitmap($hBMP)
+	TestCapture($hHBMP)
+
+	SetLog("Testing image hHBitmap = " & $hHBMP)
+
+	Local $Result
+
+	SetLog("Testing checkObstacles", $COLOR_GREEN)
+	$Result = checkObstacles()
+	SetLog("Testing checkObstacles DONE, $Result=" & $Result, $COLOR_GREEN)
+
+	SetLog("Testing waitMainScreen...", $COLOR_GREEN)
+	$Result = waitMainScreen()
+	SetLog("Testing waitMainScreen DONE, $Result=" & $Result, $COLOR_GREEN)
+
+	SetLog("Testing waitMainScreenMini", $COLOR_GREEN)
+	$Result = waitMainScreenMini()
+	SetLog("Testing waitMainScreenMini DONE, $Result=" & $Result, $COLOR_GREEN)
+
+	;checkObstacles()
+
+    _GDIPlus_BitmapDispose($hBMP)
+	_WinAPI_DeleteObject($hHBMP)
+
+	TestCapture(0)
+
+	SetLog("Testing finished", $COLOR_BLUE)
+
+	$RunState = $currentRunState
+
+EndFunc

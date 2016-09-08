@@ -49,6 +49,12 @@ Func checkAttackDisable($iSource, $Result = "")
 					If _CheckPixel($aSurrenderButton, $bCapturePixel) Then ; village search requires end battle 1s, so check for surrender/endbattle button
 						ReturnHome(False, False) ;If End battle is available
 					Else
+						;========MOD: Put Heroes To Sleep Due To Personal Break LogOff========
+                        $ClosedDueToPB = True
+                        If $ClosedDueToPB = True Then
+                            ToggleGuard()
+						 EndIf
+						;========END MOD: Put Heroes To Sleep Due To Personal Break LogOff========
 						CloseCoC()
 					EndIf
 				Else
@@ -121,21 +127,7 @@ Func checkAttackDisable($iSource, $Result = "")
 
 	Setlog("Time for break, exit now..", $COLOR_BLUE)
 
-	; Find and wait for the confirmation of exit "okay" button
-	Local $i = 0 ; Reset Loop counter
-	While 1
-		checkObstacles()
-		AndroidBackButton()
-		If _Sleep($iDelayAttackDisable1000) Then Return ; wait for window to open
-		If ClickOkay("ExitCoCokay", True) = True Then ExitLoop ; Confirm okay to exit
-		If $i > 10 Then
-			Setlog("Can not find Okay button to exit CoC, Forcefully Closing CoC", $COLOR_RED)
-			If $debugImageSave = 1 Then DebugImageSave("CheckAttackDisableFailedButtonCheck_")
-			CloseCoC()
-			ExitLoop
-		EndIf
-		$i += 1
-	WEnd
+	PoliteCloseCoC("AttackDisable_")
 
 	If _Sleep(1000) Then Return ; short wait for CoC to exit
 	PushMsg("TakeBreak")
