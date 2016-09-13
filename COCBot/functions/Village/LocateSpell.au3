@@ -31,6 +31,7 @@ Func LocateSpellFactory()
 		$MsgBox = _ExtMsgBox(0, GetTranslated(640,1,"Ok|Cancel"), GetTranslated(640,46,"Locate Spell Factory"), $stext, 15, $frmBot)
 		If $MsgBox = 1 Then
 			WinGetAndroidHandle()
+			WinActivate($HWnD)
 			Local $aPos = FindPos()
 			$SFPos[0] = $aPos[0]
 			$SFPos[1] = $aPos[1]
@@ -131,6 +132,7 @@ Func LocateDarkSpellFactory()
 		$MsgBox = _ExtMsgBox(0, GetTranslated(640,1,"Ok|Cancel"), GetTranslated(640,47,"Locate Dark Spell Factory"), $stext, 15, $frmBot)
 		If $MsgBox = 1 Then
 			WinGetAndroidHandle()
+			WinActivate($HWnD)
 			ClickP($aAway, 1, 0, "#0385")
 			Local $aPos = FindPos()
 			$DSFPos[0] = $aPos[0]

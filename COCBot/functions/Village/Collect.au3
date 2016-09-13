@@ -54,7 +54,7 @@ Func Collect()
 							Click($CollectXY[$t][0], $CollectXY[$t][1], 1, 0, "#0430")
 							If _Sleep($iDelayCollect2) Then Return
 						Else
-							ClickZone($CollectXY[$t][0], $CollectXY[$t][1], 5, "#0430")
+							ClickZone($CollectXY[$t][0], $CollectXY[$t][1], 20, "#0430")
 							_Sleep(Random($iDelayCollect2, $iDelayCollect2 * 4, 1))
 						EndIF
 					Next
@@ -77,6 +77,7 @@ Func Collect()
 		Local $MaxReturnPoints = 1
 
 		_CaptureRegion2()
+		;Local $res = DllCall($pImgLib, "str", "SearchTile", "handle", $hHBitmap2, "str", $LootCart, "float", $ToleranceImgLoc, "str", $fullCocAreas, "Int", $MaxReturnPoints)
 		Local $res = DllCall($hImgLib, "str", "SearchTile", "handle", $hHBitmap2, "str", $LootCart, "float", $ToleranceImgLoc, "str", $fullCocAreas, "Int", $MaxReturnPoints)
 		If @error Then _logErrorDLLCall($pImgLib, @error)
 		If IsArray($res) Then
@@ -131,21 +132,21 @@ Func Collect()
 		$tempGoldCollected = $iGoldCurrent - $tempGold
 		$iGoldFromMines += $tempGoldCollected
 		$iGoldTotal += $tempGoldCollected
-		If $ichkSwitchAcc = 1 Then $aGoldTotalAcc[$nCurCOCAcc - 1] += $tempGoldCollected ; Separate Stats per Each Account - SwitchAcc Mode - DEMEN
+		If $ichkSwitchAcc = 1 Then $aGoldTotalAcc[$nCurProfile -1] += $tempGoldCollected ; Separate Stats per Each Account - SwitchAcc Mode - DEMEN
 	EndIf
 
 	If $tempElixir <> "" And $iElixirCurrent <> "" Then
 		$tempElixirCollected = $iElixirCurrent - $tempElixir
 		$iElixirFromCollectors += $tempElixirCollected
 		$iElixirTotal += $tempElixirCollected
-		If $ichkSwitchAcc = 1 Then $aElixirTotalAcc[$nCurCOCAcc - 1] += $tempElixirCollected ; Separate Stats per Each Account - SwitchAcc Mode - DEMEN
+		If $ichkSwitchAcc = 1 Then $aElixirTotalAcc[$nCurProfile -1] += $tempElixirCollected ; Separate Stats per Each Account - SwitchAcc Mode - DEMEN
 	EndIf
 
 	If $tempDElixir <> "" And $iDarkCurrent <> "" Then
 		$tempDElixirCollected = $iDarkCurrent - $tempDElixir
 		$iDElixirFromDrills += $tempDElixirCollected
 		$iDarkTotal += $tempDElixirCollected
-        If $ichkSwitchAcc = 1 Then $aDarkTotalAcc[$nCurCOCAcc - 1] += $tempDElixirCollected  ; Separate Stats per Each Account - SwitchAcc Mode - DEMEN
+		If $ichkSwitchAcc = 1 Then $aDarkTotalAcc[$nCurProfile -1] += $tempDElixirCollected  ; Separate Stats per Each Account - SwitchAcc Mode - DEMEN
 	EndIf
 
 	UpdateStats()

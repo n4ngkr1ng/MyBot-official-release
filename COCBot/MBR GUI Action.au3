@@ -17,7 +17,6 @@ Func BotStart()
 	ResumeAndroid()
 
 	$RunState = True
-	$TogglePauseAllowed = True
 
 	EnableControls($frmBotBottom, False, $frmBotBottomCtrlState)
 	;$FirstAttack = 0
@@ -109,7 +108,6 @@ Func BotStop()
 
 	$RunState = False
 	$TPaused = False
-	$TogglePauseAllowed = True
 
 	;WinSetState($frmBotBottom, "", @SW_DISABLE)
 	Local $aCtrlState
@@ -143,7 +141,7 @@ Func BotStop()
 	SetLog(_PadStringCenter(" Bot Stop ", 50, "="), $COLOR_ORANGE)
 	If Not $bSearchMode Then
 		If Not $TPaused Then $iTimePassed += Int(TimerDiff($sTimer))
-		;AdlibUnRegister("SetTime")
+		AdlibUnRegister("SetTime")
 		$Restart = True
 		FileClose($hLogFileHandle)
 		$hLogFileHandle = ""

@@ -13,14 +13,14 @@
 ; Example .......: No
 ; ===============================================================================================================================
 
-Global $txtPresetSaveFilename, $txtSavePresetMessage, $lblLoadPresetMessage,$btnGUIPresetDeleteConf, $chkCheckDeleteConf
-Global $cmbPresetList, $txtPresetMessage,$btnGUIPresetLoadConf,  $lblLoadPresetMessage,$btnGUIPresetDeleteConf, $chkCheckDeleteConf
+;~ Global $txtPresetSaveFilename, $txtSavePresetMessage, $lblLoadPresetMessage,$btnGUIPresetDeleteConf, $chkCheckDeleteConf					; Already declared in file MBR GUI Design Attack - Strategies.au3 - Deleted by DEMEN
+;~ Global $cmbPresetList, $txtPresetMessage,$btnGUIPresetLoadConf,  $lblLoadPresetMessage,$btnGUIPresetDeleteConf, $chkCheckDeleteConf
 
 ;$hGUI_Profiles = GUICreate("", $_GUI_MAIN_WIDTH - 28, $_GUI_MAIN_HEIGHT - 255 - 28, 5, 25, BitOR($WS_CHILD, $WS_TABSTOP), -1, $hGUI_BOT)
 ;GUISwitch($hGUI_Profiles)
 
 Local $x = 25, $y = 45
-	$grpProfiles = GUICtrlCreateGroup(GetTranslated(637,1, "Switch Profiles"), $x - 20, $y - 20, 440, 360)
+	$grpProfiles = GUICtrlCreateGroup(GetTranslated(637,1, "Switch Profiles"), $x - 20, $y - 20, 440, 85)	; Resize Profile Group to make room for SwitchAcc Grp - DEMEN
 		;$y -= 5
 		$x -= 5
 		;$lblProfile = GUICtrlCreateLabel(GetTranslated(7,27, "Current Profile") & ":", $x, $y, -1, -1)
@@ -99,51 +99,114 @@ Local $x = 25, $y = 45
 			_GUICtrlButton_SetImageList($btnRename, $bIconEdit, 4)
 			GUICtrlSetOnEvent(-1, "btnRenameConfirm")
 			_GUICtrlSetTip(-1, GetTranslated(637,10, "Rename Profile"))
-	; Chalicucu & demen: switch CoC Acc GUI
-	Local $x = 20, $y = 95
-	GUICtrlCreateGroup(GetTranslated(636,2, "Switch CoC Accounts"), $x - 10, $y - 20, 430, 120)
-		$chkSwitchAcc = GUICtrlCreateCheckbox("Enable Switch Account", $x - 2, $y - 5, -1, -1)
-			$txtTip = "Switch to another account & profile when remain train time >=3 minutes" & @CRLF & _
-			          "This function supports maximum 8 CoC accounts & 9 Bot profiles" & @CRLF & _
-			          "Make sure to align the accounts with profiles in listing order"
+
+; Defining botting type of eachh profile - SwitchAcc - DEMEN
+	    $lblProfile = GUICtrlCreateLabel("Profile Type:", $x + 230, $y , -1, -1)
+			$txtTip = "Choosing type for this Profile" & @CRLF & "Active Profile for botting" & @CRLF & "Donate Profile for donating only" & @CRLF & "Idle Profile for staying inactive"
 			GUICtrlSetTip(-1, $txtTip)
-			GUICtrlSetOnEvent(-1, "chkSwitchAcc")
-			GUICtrlSetState(-1, $GUI_UNCHECKED)
-		$lbMapHelpAccPro = GUICtrlCreateLabel("Mapped Acc - Profile:", $x + 135, $y - 2, 130, 20)
-			GUICtrlSetColor(-1, $COLOR_BLUE)
-	    $lbMapHelp = GUICtrlCreateLabel("", $x + 240, $y - 2, 175, 30)
-			GUICtrlSetColor(-1, $COLOR_BLUE)
-		$lbTotalCoCAcc = GUICtrlCreateLabel("Total CoC Accounts:", $x - 2, $y + 18, 100, 20)
-		$txtTotalCoCAcc = GUICtrlCreateInput("0", $x + 99, $y + 18, 18, 18, BitOR($GUI_SS_DEFAULT_INPUT, $ES_CENTER, $ES_NUMBER, $ES_AUTOHSCROLL))
-			GUICtrlSetLimit(-1, 1)
-			$txtTip = "Number of Google Accounts on emulator" & @CRLF & _
-					  "Supporting maximum 8 Accounts."
-			GUICtrlSetTip(-1,$txtTip)
-		$lbAccBottingOrder = GUICtrlCreateLabel("Accounts Playing List:", $x - 2, $y + 47, 135, 20)
-		$txtAccBottingOrder = GUICtrlCreateInput("12345678", $x + 116, $y + 44, 70, 18,  BitOR($GUI_SS_DEFAULT_INPUT, $ES_CENTER, $ES_AUTOHSCROLL))
-			$txtTip = "Input group of accounts you want to play."
-			GUICtrlSetTip(-1,$txtTip)
-		$lbProfileIdxOrder = GUICtrlCreateLabel("Mapping Profile Indexs:", $x + 203, $y + 47, 130, 20)
-		$txtProfileIdxOrder = GUICtrlCreateInput("12345678", $x + 328, $y + 44, 70, 18,  BitOR($GUI_SS_DEFAULT_INPUT, $ES_CENTER, $ES_AUTOHSCROLL))
-			GUICtrlSetLimit(-1, 8)
-			$txtTip = "Input the order of Profiles correspond to CoC Accounts order."
-			GUICtrlSetTip(-1,$txtTip)
-		$chkAtkPln = GUICtrlCreateCheckbox("Check attack plan", $x - 2, $y + 66, -1, -1)
-			$txtTip = "Enable/Disable attack plan."
+
+	    $radActiveProfile= GUICtrlCreateRadio("Active", $x + 245 , $y + 18, -1, 16)
+			GUICtrlSetTip(-1, "Set as Active Profile for training troops & attacking")
+			GUICtrlSetState(-1, $GUI_CHECKED)
+			GUICtrlSetOnEvent(-1, "radProfileType")
+
+		$radDonateProfile = GUICtrlCreateRadio("Donate", $x + 305, $y + 18, -1, 16)
+			GUICtrlSetTip(-1, "Set as Donating Profile for training troops & donating only")
+			GUICtrlSetOnEvent(-1, "radProfileType")
+
+		$radIdleProfile = GUICtrlCreateRadio("Idle", $x + 375, $y + 18, -1, 16)
+			GUICtrlSetTip(-1, "Set as Idle Profile. The Bot will ignore this Profile")
+			GUICtrlSetOnEvent(-1, "radProfileType")
+
+	    $lblMatchProfileAcc = GUICtrlCreateLabel("Matching Acc. No.", $x + 230 , $y + 42 , -1, 16)
+			$txtTip = "Select the index of CoC Account to match with this Profile"
 			GUICtrlSetTip(-1, $txtTip)
-			GUICtrlSetState(-1, $GUI_UNCHECKED)
-			GUICtrlSetOnEvent(-1, "chkAtkPln")
-		$lbSwitchMode = GUICtrlCreateLabel("Switching Mode", $x + 228, $y + 70, 130, 20)
-		$cmbSwitchMode = GUICtrlCreateCombo("", $x + 313, $y + 67, 90, 20, BitOR($CBS_DROPDOWNLIST, $CBS_AUTOHSCROLL))
-			GUICtrlSetTip(-1, "Choose switching mode for play list")
-			GUICtrlSetData(-1, "Shortest Training" & "|" & "Ordered play list" & "|" & "Random")
-			GUICtrlSetOnEvent(-1, "cmbSwitchMode")
-			GUICtrlSetState (-1, $GUI_ENABLE)
-		$chkAccRelax = GUICtrlCreateCheckbox("Attack relax together", $x + 108, $y + 65, -1, -1)
-			$txtTip = "If attack is not planned for current profile" & @CRLF & _
-			          "Then bot stop emulator and relax!"
+
+		$cmbMatchProfileAcc = GUICtrlCreateCombo("", $x + 330, $y + 38, 60, 18, BitOR($CBS_DROPDOWNLIST, $CBS_AUTOHSCROLL))
+			GUICtrlSetData(-1, "---" & "|" & "Acc. 1" & "|" & "Acc. 2" & "|" & "Acc. 3" & "|" & "Acc. 4" & "|" & "Acc. 5" & "|" & "Acc. 6", "---")
 			GUICtrlSetTip(-1, $txtTip)
-			GUICtrlSetState(-1, $GUI_UNCHECKED)
-			GUICtrlSetOnEvent(-1, "chkAccRelaxTogether")
+			GUICtrlSetOnEvent(-1, "cmbMatchProfileAcc")
+
 	GUICtrlCreateGroup("", -99, -99, 1, 1)
 ;GUISetState()
+
+; SwitchAcc - DEMEN
+	Local $x = 25, $y = 135
+	$grpSwitchAcc = GUICtrlCreateGroup("Switch Account Mode", $x - 20, $y - 20, 220, 160)
+
+		$chkSwitchAcc = GUICtrlCreateCheckbox("Enable Switch Account", $x , $y, -1, -1)
+			$txtTip = "Switch to another account & profile when troop training time is >= 3 minutes" & @CRLF & "This function supports maximum 6 CoC accounts & 6 Bot profiles" & @CRLF & "Make sure to create sufficient Profiles equal to number of CoC Accounts, and align the index of accounts order with profiles order"
+			GUICtrlSetTip(-1, $txtTip)
+			GUICtrlSetOnEvent(-1, "chkSwitchAcc")
+
+		$lblTotalAccount = GUICtrlCreateLabel("Total CoC Acc:", $x + 15, $y + 29, -1, -1)
+			$txtTip = "Choose number of CoC Accounts pre-logged"
+			GUICtrlSetState(-1, $GUI_DISABLE)
+
+		$cmbTotalAccount= GUICtrlCreateCombo("", $x + 100, $y + 25, -1, -1, BitOR($CBS_DROPDOWNLIST, $CBS_AUTOHSCROLL))
+			GUICtrlSetData(-1, "Auto detect" & "|" & "1 Account" & "|" & "2 Accounts" & "|" & "3 Accounts" & "|" & "4 Accounts" & "|" & "5 Accounts" & "|" & "6 Accounts", "Auto detect")
+			GUICtrlSetTip(-1, $txtTip)
+			GUICtrlSetState(-1, $GUI_DISABLE)
+
+		$radSmartSwitch= GUICtrlCreateRadio("Smart switch", $x + 15 , $y + 55, -1, 16)
+			GUICtrlSetTip(-1, "Switch to account with the shortest remain training time")
+			GUICtrlSetState(-1, $GUI_CHECKED)
+			GUICtrlSetState(-1, $GUI_DISABLE)
+
+		$radNormalSwitch = GUICtrlCreateRadio("Normal switch", $x + 100, $y + 55, -1, 16)
+			GUICtrlSetTip(-1, "Switching accounts continously")
+			GUICtrlSetState(-1, $GUI_DISABLE)
+			GUICtrlSetOnEvent(-1, "radNormalSwitch")
+
+		$y += 80
+
+		$chkUseTrainingClose = GUICtrlCreateCheckbox("Combo Sleep after Switch Account", $x, $y, -1, -1)
+			$txtTip = "Close CoC combo with Switch Account when there is more than 3 mins remaining on training time of all accounts."
+			GUICtrlSetTip(-1, $txtTip)
+			GUICtrlSetOnEvent(-1, "chkUseTrainingClose")
+
+		$radCloseCoC= GUICtrlCreateRadio("Close CoC", $x + 15 , $y + 30, -1, 16)
+			GUICtrlSetState(-1, $GUI_CHECKED)
+
+		$radCloseAndroid = GUICtrlCreateRadio("Close Android", $x + 100, $y + 30, -1, 16)
+
+	GUICtrlCreateGroup("", -99, -99, 1, 1)
+
+	; Profiles & Account matching
+
+    Local $x = 250, $y = 135
+	  $grpSwitchAccMapping = GUICtrlCreateGroup("Profiles", $x - 20, $y - 20, 215, 275)
+
+		$btnUpdateProfiles = GUICtrlCreateButton("Update Profiles/ Acc matching", $x, $y - 5 , 170, 25)
+		GUICtrlSetOnEvent(-1, "btnUpdateProfile")
+
+		Global $lblProfileList[8]
+
+	  $y += 25
+		 For $i = 0 To 7
+			$lblProfileList[$i] = GUICtrlCreateLabel("", $x, $y + ($i) * 25, 190, 18, $SS_LEFT)
+		 Next
+
+	GUICtrlCreateGroup("", -99, -99, 1, 1)
+
+	; Restart Android - DEMEN
+	Local $x = 25, $y = 300
+	$grpRestartAndroid = GUICtrlCreateGroup("Restart Android", $x - 20, $y - 20, 220, 110)
+
+	    $chkRestartAndroid = GUICtrlCreateCheckbox("Restart Android every" & ":", $x, $y, -1, -1)
+			$txtTip = "Restart Android after long searches or after getting stuck at opening train window"
+			GUICtrlSetState(-1, $GUI_UNCHECKED)
+			GUICtrlSetOnEvent(-1, "chkRestartAndroid")
+		$txtRestartAndroidSearchLimit = GUICtrlCreateInput("200", $x + 20, $y + 30, 30, 18, BitOR($GUI_SS_DEFAULT_INPUT, $ES_CENTER, $ES_NUMBER))
+			GUICtrlSetTip(-1, $txtTip)
+			GUICtrlSetLimit(-1, 4)
+			GUICtrlSetState(-1, $GUI_DISABLE)
+		$lblRestartAndroidSearchLimit = GUICtrlCreateLabel("Search(es)", $x + 57, $y + 32, -1, -1)
+
+		$txtRestartAndroidTrainError = GUICtrlCreateInput("10", $x + 20, $y + 55, 30, 18, BitOR($GUI_SS_DEFAULT_INPUT, $ES_CENTER, $ES_NUMBER))
+			GUICtrlSetTip(-1, $txtTip)
+			GUICtrlSetLimit(-1, 4)
+			GUICtrlSetState(-1, $GUI_DISABLE)
+		$lblRestartAndroidTrainError = GUICtrlCreateLabel("times error at Train Window", $x + 57, $y + 57, -1, -1)
+
+	GUICtrlCreateGroup("", -99, -99, 1, 1)

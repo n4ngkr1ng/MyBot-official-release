@@ -2,9 +2,8 @@
 ; #FUNCTION# ====================================================================================================================
 ; Name ..........: CheckOverviewFullArmy
 ; Description ...: Checks if the army is full on the training overview screen
-; Syntax ........: CheckOverviewFullArmy([$bOpenArmyWindow = False])
-; Parameters ....: $bOpenArmyWindow  = Bool value true if train overview window needs to be opened
-;				 : $bCloseArmyWindow = Bool value, true if train overview window needs to be closed
+; Syntax ........: CheckOverviewFullArmy([$bWindowOpen = False])
+; Parameters ....: $bWindowOpen         - [optional] a boolean flag if we need to open the Amry training window. Default is False.
 ; Return values .: None
 ; Author ........: KnowJack (July 2015)
 ; Modified ......: MonkeyHunter (2016-3)
@@ -15,13 +14,13 @@
 ; Example .......: No
 ; ===============================================================================================================================
 
-Func CheckOverviewFullArmy($bOpenArmyWindow = False, $bCloseArmyWindow = False)
+Func CheckOverviewFullArmy($bWindowOpen = False)
 
 	;;;;;; Checks for full army using the green sign in army overview window ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 	;;;;;; Will only get full army when the maximum capacity of your camps are reached regardless of the full army percentage you input in GUI ;;;;;;;;;
 	;;;;;; Use this only in halt attack mode and if an error happened in reading army current number Or Max capacity ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-	If $bOpenArmyWindow = True Then
+	If $bWindowOpen = True Then
 		ClickP($aAway, 1, 0, "#0346") ;Click Away
 		If _Sleep($iDelayCheckFullArmy1) Then Return
 		If $iUseRandomClick = 0 then
@@ -58,7 +57,7 @@ Func CheckOverviewFullArmy($bOpenArmyWindow = False, $bCloseArmyWindow = False)
 	$canRequestCC = _ColorCheck(_GetPixelColor($aRequestTroopsAO[0], $aRequestTroopsAO[1], True), Hex($aRequestTroopsAO[2], 6), $aRequestTroopsAO[5])
 	If $debugSetlog = 1 Then Setlog("Can Request CC: " & $canRequestCC, $COLOR_PURPLE)
 
-	If $bCloseArmyWindow = True Then
+	If $bWindowOpen = True Then
 		ClickP($aAway, 1, 0, "#0348") ;Click Away
 		If _Sleep($iDelayCheckFullArmy3) Then Return
 	EndIf

@@ -567,7 +567,7 @@ Func saveConfig() ;Saves the controls settings to the config
 	$icmbBotCond = _GUICtrlComboBox_GetCurSel($cmbBotCond)
 	$icmbHoursStop = _GUICtrlComboBox_GetCurSel($cmbHoursStop)
 
-	$sTimeWakeUp = Int(GUICtrlRead($txtTimeWakeUp)) * 60 ; Minutes are entered
+	$sTimeWakeUp = GUICtrlRead($txtTimeWakeUp)
 
 	$itxtRestartGold = GUICtrlRead($txtRestartGold)
 	$itxtRestartElixir = GUICtrlRead($txtRestartElixir)
@@ -675,27 +675,6 @@ Func saveConfig() ;Saves the controls settings to the config
 	EndIf
 	$iValueSinglePBTimeForced = GUICtrlRead($txtSinglePBTimeForced)
 	$iValuePBTimeForcedExit = GUICtrlRead($txtPBTimeForcedExit)
-
-    ;========MOD: Put Heroes To Sleep Due To Personal Break LogOff========
-	;- Barbarian King
-	If GUICtrlRead($chkPBSleepBK) = $GUI_CHECKED Then
-		$ichkPBSleepBK = 1
-	Else
-		$ichkPBSleepBK = 0
-	EndIf
-	;- Archer Queen
-	If GUICtrlRead($chkPBSleepAQ) = $GUI_CHECKED Then
-		$ichkPBSleepAQ = 1
-	Else
-		$ichkPBSleepAQ = 0
-	EndIf
-	;- Grand Warden
-	If GUICtrlRead($chkPBSleepGW) = $GUI_CHECKED Then
-		$ichkPBSleepGW = 1
-	Else
-		$ichkPBSleepGW = 0
-	EndIf
-	;========END MOD: Put Heroes To Sleep Due To Personal Break LogOff========
 
 	If GUICtrlRead($chkUseRandomClick) = $GUI_CHECKED Then
 		$iUseRandomClick = 1
@@ -2480,7 +2459,7 @@ Func saveConfig() ;Saves the controls settings to the config
 	EndIf
 	IniWriteS($config, "search", "TotalTrainSpaceSpell", 0)
 
-	; SmartZap Settings - Added by LunaEclipse
+	; SmartZap Settings from ChaCalGyn (LunaEclipse) - DEMEN
 	If GUICtrlRead($chkSmartLightSpell) = $GUI_CHECKED Then
 		IniWrite($config, "SmartZap", "UseSmartZap", 1)
 	Else
@@ -2491,20 +2470,66 @@ Func saveConfig() ;Saves the controls settings to the config
 	Else
 		IniWrite($config, "SmartZap", "ZapDBOnly", 0)
 	EndIf
-    If GUICtrlRead($chkSmartZapSaveHeroes) = $GUI_CHECKED Then
-        IniWrite($config, "SmartZap", "THSnipeSaveHeroes", 1)
-    Else
-        IniWrite($config, "SmartZap", "THSnipeSaveHeroes", 0)
-    EndIf
+	If GUICtrlRead($chkSmartZapSaveHeroes) = $GUI_CHECKED Then
+		IniWrite($config, "SmartZap", "THSnipeSaveHeroes", 1)
+	Else
+		IniWrite($config, "SmartZap", "THSnipeSaveHeroes", 0)
+	EndIf
 	IniWrite($config, "SmartZap", "MinDE", GUICtrlRead($txtMinDark))
 
-	;ExtremeZap - Added by TheRvenor
-	If GUICtrlRead($chkExtLightSpell) = $GUI_CHECKED Then
-		IniWrite($config, "MOD", "ExtLightSpell", "1")
-	Else
-		IniWrite($config, "MOD", "ExtLightSpell", "0")
+	; SwitchAcc Mode - DEMEN
+
+	If GUICtrlRead($radActiveProfile) = $GUI_CHECKED Then														; 1 = Active, 2 = Donate, 3 = Idle
+		IniWrite($config, "Switch Account", "Profile Type", 1)
+		IniWrite($profile, "Profile Type", _GUICtrlCombobox_GetCurSel($cmbProfile)+1, 1)
+	 ElseIf GUICtrlRead($radDonateProfile) = $GUI_CHECKED Then
+		IniWrite($config, "Switch Account", "Profile Type", 2)
+		IniWrite($profile, "Profile Type", _GUICtrlCombobox_GetCurSel($cmbProfile)+1, 2)
+	 Else
+		IniWrite($config, "Switch Account", "Profile Type", 3)
+		IniWrite($profile, "Profile Type", _GUICtrlCombobox_GetCurSel($cmbProfile)+1, 3)
 	EndIf
-	IniWrite($config, "MOD", "MinDE", GUICtrlRead($txtMinDark))
+
+	IniWrite($config, "Switch Account", "Match Profile Acc", _GUICtrlCombobox_GetCurSel($cmbMatchProfileAcc))	 ; 0 = No Acc (idle), 1 = Acc 1, 2 = Acc 2, etc.
+
+	If GUICtrlRead($chkSwitchAcc) = $GUI_CHECKED Then
+		IniWrite($profile, "Switch Account", "Enable", 1)
+	Else
+		IniWrite($profile, "Switch Account", "Enable", 0)
+	EndIf
+
+	IniWrite($profile, "Switch Account", "Total Coc Account", _GUICtrlCombobox_GetCurSel($cmbTotalAccount))	; 0 = AutoDetect, 1 = 1 Acc, 2 = 2 Acc, etc.
+
+	If GUICtrlRead($radSmartSwitch) = $GUI_CHECKED Then
+	   IniWrite($profile, "Switch Account", "Smart Switch", 1)
+	Else
+	   IniWrite($profile, "Switch Account", "Smart Switch", 0)
+	EndIf
+
+	If GUICtrlRead($chkUseTrainingClose) = $GUI_CHECKED Then
+		If GUICtrlRead($radCloseCoC) = $GUI_CHECKED Then
+			IniWrite($profile, "Switch Account", "Sleep Combo", 1)		; Sleep Combo = 1 => Close CoC
+		Else
+			IniWrite($profile, "Switch Account", "Sleep Combo", 2)		; Sleep Combo = 2 => Close Android
+		EndIf
+	Else
+		IniWrite($profile, "Switch Account", "Sleep Combo", 0)
+	EndIf
+
+
+   	; Restart Android after long search - DEMEN
+
+	If GUICtrlRead($ChkRestartAndroid) = $GUI_CHECKED Then
+		IniWrite($config, "Restart Android", "Enable", 1)
+	Else
+		IniWrite($config, "Restart Android", "Enable", 0)
+	EndIf
+	IniWrite($config, "Restart Android", "Restart Android Search Limit", GUICtrlRead($TxtRestartAndroidSearchlimit))
+	IniWrite($config, "Restart Android", "Restart Android Train Error", GUICtrlRead($TxtRestartAndroidTrainError))
+
+	; CSV Deployment Speed Mod
+	IniWriteS($config, "attack", "CSVSpeedDB", $isldSelectedCSVSpeed[$DB])
+	IniWriteS($config, "attack", "CSVSpeedAB", $isldSelectedCSVSpeed[$LB])
 
 	If $hFile <> -1 Then FileClose($hFile)
 

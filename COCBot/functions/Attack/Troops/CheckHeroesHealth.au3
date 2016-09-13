@@ -23,7 +23,6 @@ Func CheckHeroesHealth()
 		$aQueenHealthCopy[0] = GetXPosOfArmySlot($Queen, 68)
 		Local $aWardenHealthCopy = $aWardenHealth
 		$aWardenHealthCopy[0] = GetXPosOfArmySlot($Warden, 68)
-		If _Sleep($iDelayRespond) Then Return  ; improve pause button response
 
 		If $debugSetlog = 1 Then
 			Setlog(" CheckHeroesHealth started ")
@@ -56,7 +55,6 @@ Func CheckHeroesHealth()
 				$checkWPower = False
 			EndIf
 		EndIf
-		If _Sleep($iDelayRespond) Then Return ; improve pause button response
 	EndIf
 EndFunc   ;==>CheckHeroesHealth
 

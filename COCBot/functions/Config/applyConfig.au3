@@ -730,11 +730,9 @@ Func applyConfig($bRedrawAtExit = True) ;Applies the data from config to the con
 
 	If $ibtnCloseWaitExact = 1 Then
 		GUICtrlSetState($btnCloseWaitExact, $GUI_CHECKED)
-		GUICtrlSetState($btnCloseWaitRandom, $GUI_UNCHECKED)
 	EndIf
 	If $ibtnCloseWaitRandom = 1 Then
 		GUICtrlSetState($btnCloseWaitRandom, $GUI_CHECKED)
-		GUICtrlSetState($btnCloseWaitExact, $GUI_UNCHECKED)
 	EndIf
 
 	_GUICtrlComboBox_SetCurSel($cmbCloseWaitRdmPercent, $icmbCloseWaitRdmPercent)
@@ -1902,7 +1900,7 @@ Func applyConfig($bRedrawAtExit = True) ;Applies the data from config to the con
 	_GUICtrlComboBox_SetCurSel($cmbHoursStop, $icmbHoursStop)
 	cmbBotCond()
 
-	GUICtrlSetData($txtTimeWakeUp, Int(Int($sTimeWakeUp) / 60))
+	GUICtrlSetData($txtTimeWakeUp, $sTimeWakeUp)
 
 	GUICtrlSetData($txtRestartGold, $itxtRestartGold)
 	GUICtrlSetData($txtRestartElixir, $itxtRestartElixir)
@@ -2579,33 +2577,13 @@ Func applyConfig($bRedrawAtExit = True) ;Applies the data from config to the con
 	; Reenabling window redraw - Keep this last....
 	If $bRedrawAtExit Then SetRedrawBotWindow(True)
 
-    ;========MOD: Put Heroes To Sleep Due To Personal Break LogOff========
-    If $ichkPBSleepBK = 1 Then
-        GUICtrlSetState($chkPBSleepBK, $GUI_CHECKED)
-    Else
-        GUICtrlSetState($chkPBSleepBK, $GUI_UNCHECKED)
-    EndIf
-    If $ichkPBSleepAQ = 1 Then
-        GUICtrlSetState($chkPBSleepAQ, $GUI_CHECKED)
-    Else
-        GUICtrlSetState($chkPBSleepAQ, $GUI_UNCHECKED)
-    EndIf
-    If $ichkPBSleepGW = 1 Then
-        GUICtrlSetState($chkPBSleepGW, $GUI_CHECKED)
-    Else
-        GUICtrlSetState($chkPBSleepGW, $GUI_UNCHECKED)
-    EndIf
-    ;========END MOD: Put Heroes To Sleep Due To Personal Break LogOff========
-
-	; SmartZap Settings - Added by LunaEclipse
+   ; SmartZap from ChaCalGyn (LunaEclipse) - DEMEN
 	If $ichkSmartZap = 1 Then
-		GUICtrlSetState($chkExtLightSpell, $GUI_DISABLE)
 		GUICtrlSetState($chkSmartLightSpell, $GUI_CHECKED)
 		GUICtrlSetState($chkSmartZapDB, $GUI_ENABLE)
 		GUICtrlSetState($chkSmartZapSaveHeroes, $GUI_ENABLE)
 		GUICtrlSetState($txtMinDark, $GUI_ENABLE)
 	Else
-		GUICtrlSetState($chkExtLightSpell, $GUI_ENABLE)
 		GUICtrlSetState($chkSmartZapDB, $GUI_DISABLE)
 		GUICtrlSetState($chkSmartZapSaveHeroes, $GUI_DISABLE)
 		GUICtrlSetState($txtMinDark, $GUI_DISABLE)
@@ -2623,48 +2601,67 @@ Func applyConfig($bRedrawAtExit = True) ;Applies the data from config to the con
 	EndIf
 	GUICtrlSetData($txtMinDark, $itxtMinDE)
 
-	; ExtremeZap - Added by TheRevenor
-	If $ichkExtLightSpell = 1 Then
-		GUICtrlSetState($chkSmartLightSpell, $GUI_DISABLE)
-		GUICtrlSetState($chkExtLightSpell, $GUI_CHECKED)
+	; CSV Deployment Speed Mod
+	GUICtrlSetData($sldSelectedSpeedDB, $isldSelectedCSVSpeed[$DB])
+	GUICtrlSetData($sldSelectedSpeedAB, $isldSelectedCSVSpeed[$LB])
+	sldSelectedSpeedDB()
+	sldSelectedSpeedAB()
+
+   ; SwitchAcc- DEMEN
+	Switch $ProfileType
+	Case 1
+	   GUICtrlSetState($radActiveProfile, $GUI_CHECKED)
+	Case 2
+	   GUICtrlSetState($radDonateProfile, $GUI_CHECKED)
+	Case 3
+	   GUICtrlSetState($radIdleProfile, $GUI_CHECKED)
+	EndSwitch
+
+	_GUICtrlCombobox_SetCurSel($cmbMatchProfileAcc, $MatchProfileAcc)
+
+ 	If $ichkSwitchAcc = 1 Then
+ 		GUICtrlSetState($chkSwitchAcc, $GUI_CHECKED)
+ 	Else
+ 		GUICtrlSetState($chkSwitchAcc, $GUI_UNCHECKED)
+ 	EndIf
+
+	If $ichkSmartSwitch = 1 Then
+	   GUICtrlSetState($radSmartSwitch, $GUI_CHECKED)
+ 	Else
+	   GUICtrlSetState($radNormalSwitch, $GUI_CHECKED)
+ 	EndIf
+
+	chkSwitchAcc()
+
+
+	_GUICtrlCombobox_SetCurSel($cmbTotalAccount, $icmbTotalCoCAcc)	; 0 = AutoDetect
+
+	If $ichkCloseTraining >= 1 Then
+		GUICtrlSetState($chkUseTrainingClose, $GUI_CHECKED)
+		If $ichkCloseTraining = 1 Then
+			GUICtrlSetState($radCloseCoC, $GUI_CHECKED)
+		Else
+			GUICtrlSetState($radCloseAndroid, $GUI_CHECKED)
+		EndIf
 	Else
-		GUICtrlSetState($chkSmartLightSpell, $GUI_ENABLE)
-		GUICtrlSetState($chkExtLightSpell, $GUI_UNCHECKED)
+		GUICtrlSetState($chkUseTrainingClose, $GUI_UNCHECKED)
 	EndIf
-	ExtLightSpell()
 
-	GUICtrlSetData($txtMinDark, $itxtMinDE)
-
-	;=> chalicucu & demen:  switchcocacc
-	If $ichkSwitchAcc = 1 Then
-	   _GUICtrlComboBox_SetCurSel($cmbSwitchMode, $iSwitchMode)
-	   GUICtrlSetState($chkSwitchAcc, $GUI_CHECKED)
-	   GUICtrlSetState($chkCloseWaitEnable, $GUI_UNCHECKED)
-	   GUICtrlSetState($chkCloseWaitEnable, $GUI_DISABLE)
-		For $i = $chkCloseWaitTrain To $lblCloseWaitRdmPercent
-			GUICtrlSetState($i, $GUI_HIDE)
-		Next
-		For $i = $lbMapHelpAccPro To $chkAccRelax
-			GUICtrlSetState($i, $GUI_SHOW)
-		Next
-    Else
-	   GUICtrlSetState($chkSwitchAcc, $GUI_UNCHECKED)
-		For $i = $lbMapHelpAccPro To $chkAccRelax
- 			GUICtrlSetState($i, $GUI_HIDE)
- 		Next
-    EndIf
-	If $AccRelaxTogether = 1 Then
-	   GUICtrlSetState($chkAccRelax, $GUI_CHECKED)
-    Else
-	   GUICtrlSetState($chkAccRelax, $GUI_UNCHECKED)
-    EndIf
-	If $iChkAtkPln Then
-	   GUICtrlSetState($chkAtkPln, $GUI_CHECKED)
+	If $ichkCloseTraining = 1 Then
+		GUICtrlSetState($chkUseTrainingClose, $GUI_CHECKED)
 	Else
-	   GUICtrlSetState($chkAtkPln, $GUI_UNCHECKED)
+		GUICtrlSetState($chkUseTrainingClose, $GUI_UNCHECKED)
 	EndIf
 
-	GUICtrlSetData($txtTotalCoCAcc, IniRead($profile, "switchcocacc" , "totalacc" ,"0"))
-	GUICtrlSetData($txtAccBottingOrder, IniRead($profile, "switchcocacc" , "order" ,"123"))
-	GUICtrlSetData($txtProfileIdxOrder, IniRead($profile, "switchcocacc" , "profile" ,"123"))
+	; Restart Android after long search - DEMEN
+	If $iChkRestartAndroid = 1 Then
+		GUICtrlSetState($chkRestartAndroid, $GUI_CHECKED)
+	Else
+		GUICtrlSetState($chkRestartAndroid, $GUI_UNCHECKED)
+	 EndIf
+	 chkRestartAndroid()
+
+	 GUICtrlSetData($txtRestartAndroidSearchLimit, $iRestartAndroidSearchLimit)
+	 GUICtrlSetData($txtRestartAndroidTrainError, $iRestartAndroidTrainError)
+
 EndFunc   ;==>applyConfig

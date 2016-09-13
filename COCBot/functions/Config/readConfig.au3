@@ -255,15 +255,15 @@ Func readConfig($inputfile = $config, $partial = False) ;Reads config and sets i
 		IniReadS($iChkMeetOne[$DB], $config, "search", "DBMeetOne", "0")
 
 		IniReadS($iEnableAfterCount[$DB], $config, "search", "DBEnableAfterCount", "1")
-		IniReadS($iEnableBeforeCount[$DB], $config, "search", "DBEnableBeforeCount", "9999", "Int")
-		IniReadS($iEnableAfterTropies[$DB], $config, "search", "DBEnableAfterTropies", "100", "Int")
-		IniReadS($iEnableBeforeTropies[$DB], $config, "search", "DBEnableBeforeTropies", "6000", "Int")
-		IniReadS($iEnableAfterArmyCamps[$DB], $config, "search", "DBEnableAfterArmyCamps", "100", "Int")
-		IniReadS($iMinGold[$DB], $config, "search", "DBsearchGold", "80000", "Int")
+		IniReadS($iEnableBeforeCount[$DB], $config, "search", "DBEnableBeforeCount", "9999")
+		IniReadS($iEnableAfterTropies[$DB], $config, "search", "DBEnableAfterTropies", "100")
+		IniReadS($iEnableBeforeTropies[$DB], $config, "search", "DBEnableBeforeTropies", "6000")
+		IniReadS($iEnableAfterArmyCamps[$DB], $config, "search", "DBEnableAfterArmyCamps", "100")
+		IniReadS($iMinGold[$DB], $config, "search", "DBsearchGold", "80000")
 		IniReadS($iMinElixir[$DB], $config, "search", "DBsearchElixir", "80000")
-		IniReadS($iMinGoldPlusElixir[$DB], $config, "search", "DBsearchGoldPlusElixir", "160000", "Int")
-		IniReadS($iMinDark[$DB], $config, "search", "DBsearchDark", "0", "Int")
-		IniReadS($iMinTrophy[$DB], $config, "search", "DBsearchTrophy", "0", "Int")
+		IniReadS($iMinGoldPlusElixir[$DB], $config, "search", "DBsearchGoldPlusElixir", "160000")
+		IniReadS($iMinDark[$DB], $config, "search", "DBsearchDark", "0")
+		IniReadS($iMinTrophy[$DB], $config, "search", "DBsearchTrophy", "0")
 		IniReadS($iCmbTH[$DB], $config, "search", "DBTHLevel", "0")
 
 		IniReadS($iCmbWeakMortar[$DB], $config, "search", "DBWeakMortar", "5")
@@ -286,16 +286,16 @@ Func readConfig($inputfile = $config, $partial = False) ;Reads config and sets i
 		IniReadS($iChkMeetOne[$LB], $config, "search", "ABMeetOne", "0")
 
 		IniReadS($iEnableAfterCount[$LB], $config, "search", "ABEnableAfterCount", "1")
-		IniReadS($iEnableBeforeCount[$LB], $config, "search", "ABEnableBeforeCount", "9999", "Int")
-		IniReadS($iEnableAfterTropies[$LB], $config, "search", "ABEnableAfterTropies", "100", "Int")
-		IniReadS($iEnableBeforeTropies[$LB], $config, "search", "ABEnableBeforeTropies", "6000", "Int")
-		IniReadS($iEnableAfterArmyCamps[$LB], $config, "search", "ABEnableAfterArmyCamps", "100", "Int")
+		IniReadS($iEnableBeforeCount[$LB], $config, "search", "ABEnableBeforeCount", "9999")
+		IniReadS($iEnableAfterTropies[$LB], $config, "search", "ABEnableAfterTropies", "100")
+		IniReadS($iEnableBeforeTropies[$LB], $config, "search", "ABEnableBeforeTropies", "6000")
+		IniReadS($iEnableAfterArmyCamps[$LB], $config, "search", "ABEnableAfterArmyCamps", "100")
 
-		IniReadS($iMinGold[$LB], $config, "search", "ABsearchGold", "80000", "Int")
+		IniReadS($iMinGold[$LB], $config, "search", "ABsearchGold", "80000")
 		IniReadS($iMinElixir[$LB], $config, "search", "ABsearchElixir", "80000")
-		IniReadS($iMinGoldPlusElixir[$LB], $config, "search", "ABsearchGoldPlusElixir", "160000", "Int")
-		IniReadS($iMinDark[$LB], $config, "search", "ABsearchDark", "0", "Int")
-		IniReadS($iMinTrophy[$LB], $config, "search", "ABsearchTrophy", "0", "Int")
+		IniReadS($iMinGoldPlusElixir[$LB], $config, "search", "ABsearchGoldPlusElixir", "160000")
+		IniReadS($iMinDark[$LB], $config, "search", "ABsearchDark", "0")
+		IniReadS($iMinTrophy[$LB], $config, "search", "ABsearchTrophy", "0")
 		IniReadS($iCmbTH[$LB], $config, "search", "ABTHLevel", "0")
 
 		IniReadS($iCmbWeakMortar[$LB], $config, "search", "ABWeakMortar", "5")
@@ -342,19 +342,19 @@ Func readConfig($inputfile = $config, $partial = False) ;Reads config and sets i
 		IniReadS($THaddtiles, $config, "search", "THaddTiles", "2")
 
 		IniReadS($iEnableAfterCount[$TS], $config, "search", "TSEnableAfterCount", "1")
-		IniReadS($iEnableBeforeCount[$TS], $config, "search", "TSEnableBeforeCount", "9999", "Int")
-		IniReadS($iEnableAfterTropies[$TS], $config, "search", "TSEnableAfterTropies", "100", "Int")
-		IniReadS($iEnableBeforeTropies[$TS], $config, "search", "TSEnableBeforeTropies", "6000", "Int")
-		IniReadS($iEnableAfterArmyCamps[$TS], $config, "search", "TSEnableAfterArmyCamps", "100", "Int")
-		IniReadS($iMinGold[$TS], $config, "search", "TSsearchGold", "80000", "Int")
-		IniReadS($iMinElixir[$TS], $config, "search", "TSsearchElixir", "80000", "Int")
-		IniReadS($iMinGoldPlusElixir[$TS], $config, "search", "TSsearchGoldPlusElixir", "160000", "Int")
-		IniReadS($iMinDark[$TS], $config, "search", "TSsearchDark", "600", "Int")
+		IniReadS($iEnableBeforeCount[$TS], $config, "search", "TSEnableBeforeCount", "9999")
+		IniReadS($iEnableAfterTropies[$TS], $config, "search", "TSEnableAfterTropies", "100")
+		IniReadS($iEnableBeforeTropies[$TS], $config, "search", "TSEnableBeforeTropies", "6000")
+		IniReadS($iEnableAfterArmyCamps[$TS], $config, "search", "TSEnableAfterArmyCamps", "100")
+		IniReadS($iMinGold[$TS], $config, "search", "TSsearchGold", "80000")
+		IniReadS($iMinElixir[$TS], $config, "search", "TSsearchElixir", "80000")
+		IniReadS($iMinGoldPlusElixir[$TS], $config, "search", "TSsearchGoldPlusElixir", "160000")
+		IniReadS($iMinDark[$TS], $config, "search", "TSsearchDark", "600")
 		IniReadS($iCmbMeetGE[$TS], $config, "search", "TSMeetGE", "1")
 
 		IniReadS($iChkTrophyRange, $config, "search", "TrophyRange", "0")
-		IniReadS($itxtdropTrophy, $config, "search", "MinTrophy", "5000", "Int")
-		IniReadS($itxtMaxTrophy, $config, "search", "MaxTrophy", "5000", "Int")
+		IniReadS($itxtdropTrophy, $config, "search", "MinTrophy", "5000")
+		IniReadS($itxtMaxTrophy, $config, "search", "MaxTrophy", "5000")
 		IniReadS($iChkTrophyHeroes, $config, "search", "chkTrophyHeroes", "0")
 		IniReadS($iChkTrophyAtkDead, $config, "search", "chkTrophyAtkDead", "0")
 		IniReadS($itxtDTArmyMin, $config, "search", "DTArmyMin", "70")
@@ -745,12 +745,6 @@ Func readConfig($inputfile = $config, $partial = False) ;Reads config and sets i
 		$iValueSinglePBTimeForced = IniRead($config, "other", "ValueSinglePBTimeForced", "18")
 		$iValuePBTimeForcedExit = IniRead($config, "other", "ValuePBTimeForcedExit", "15")
 
-	    ;========MOD: Put Heroes To Sleep Due To Personal Break LogOff========
-		$ichkPBSleepBK = IniRead($config, "other", "chkPBSleepBK", "0")
-		$ichkPBSleepAQ = IniRead($config, "other", "chkPBSleepAQ", "0")
-		$ichkPBSleepGW = IniRead($config, "other", "chkPBSleepGW", "0")
-		;========END MOD: Put Heroes To Sleep Due To Personal Break LogOff========
-
 		$ichkLanguage = IniRead($config, "General", "ChkLanguage", "1")
 		$ichkDisableSplash = IniRead($config, "General", "ChkDisableSplash", $ichkDisableSplash)
 		$ichkVersion = IniRead($config, "General", "ChkVersion", "1")
@@ -1004,15 +998,30 @@ Func readConfig($inputfile = $config, $partial = False) ;Reads config and sets i
 		IniReadS($iEnableSpellsWait[$LB], $config, "search", "ChkABSpellsWait", "0")
 		IniReadS($iTotalTrainSpaceSpell, $config, "search", "TotalTrainSpaceSpell", "0")
 
-		; SmartZap Settings - Added by LunaEclipse
+		; SmartZap from ChaCalGyn (LunaEclipse) - DEMEN
 		$ichkSmartZap = IniRead($config, "SmartZap", "UseSmartZap", "1")
 		$ichkSmartZapDB = IniRead($config, "SmartZap", "ZapDBOnly", "1")
-        $ichkSmartZapSaveHeroes = IniRead($config, "SmartZap", "THSnipeSaveHeroes", "1")
-		$itxtMinDE = IniRead($config, "SmartZap", "MinDE", "250")
+		$ichkSmartZapSaveHeroes = IniRead($config, "SmartZap", "THSnipeSaveHeroes", "1")
+		$itxtMinDE = IniRead($config, "SmartZap", "MinDE", "300")
 
-		; ExtremeZap - Added by TheRevenor
-		$ichkExtLightSpell = IniRead($config, "MOD", "ExtLightSpell", "0")
-		$itxtMinDE = IniRead($config, "MOD", "MinDE", "250")
+		; SwitchAcc Mode - DEMEN
+		$ichkSwitchAcc = IniRead($profile, "Switch Account", "Enable", "0")
+		$icmbTotalCoCAcc = IniRead($profile, "Switch Account", "Total Coc Account", "0")	; 0 = AutoDetect
+		$ichkSmartSwitch = IniRead($profile, "Switch Account", "Smart Switch", "1")
+		$ichkCloseTraining = Number(IniRead($profile, "Switch Account", "Sleep Combo", "0"))	; Sleep Combo, 1 = Close CoC, 2 = Close Android, 0 = No sleep
+
+		$ProfileType = IniRead($config, "Switch Account", "Profile Type", "")
+		$MatchProfileAcc = IniRead($config, "Switch Account", "Match Profile Acc", "")
+
+		; Restart Android after long search - DEMEN
+		 $iChkRestartAndroid = IniRead($config, "Restart Android", "Enable", "1")
+		 $iRestartAndroidSearchLimit = IniRead($config, "Restart Android", "Restart Android Search Limit", "200")
+		 $iRestartAndroidTrainError= IniRead($config, "Restart Android", "Restart Android Train Error", "10")
+
+		 ; CSV Deployment Speed Mod
+		IniReadS($isldSelectedCSVSpeed[$DB], $config, "attack", "CSVSpeedDB", 3)
+		IniReadS($isldSelectedCSVSpeed[$LB], $config, "attack", "CSVSpeedAB", 3)
+
 
 	Else
 		Return False

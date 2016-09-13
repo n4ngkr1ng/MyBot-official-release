@@ -347,19 +347,11 @@ EndFunc   ;==>chkBoostBarracksHoursE2
 
 Func chkCloseWaitEnable()
 	If GUICtrlRead($chkCloseWaitEnable) = $GUI_CHECKED Then
-		For $i = $chkCloseWaitTrain To $lblCloseWaitRdmPercent
-			GUICtrlSetState($i, $GUI_SHOW)
-		Next
 		$ichkCloseWaitEnable = 1
 		_GUI_Value_STATE("ENABLE", $groupCloseWaitTrain)
-		GUICtrlSetState($chkSwitchAcc, $GUI_DISABLE)		; Demen & chalicucu Switch Account
 	Else
-		For $i = $chkCloseWaitTrain To $lblCloseWaitRdmPercent
-			GUICtrlSetState($i, $GUI_HIDE)
-		Next
 		$ichkCloseWaitEnable = 0
 		_GUI_Value_STATE("DISABLE", $groupCloseWaitTrain)
-		GUICtrlSetState($chkSwitchAcc, $GUI_ENABLE)			; Demen & chalicucu Switch Account
 	EndIf
 	If GUICtrlRead($btnCloseWaitStopRandom) = $GUI_CHECKED Then
 		GUICtrlSetState($btnCloseWaitStop, BitOR($GUI_DISABLE, $GUI_UNCHECKED))
@@ -391,7 +383,7 @@ Func btnCloseWaitStopRandom()
 		GUICtrlSetState($btnCloseWaitStop, BitOR($GUI_DISABLE, $GUI_UNCHECKED))
 	Else
 		$ibtnCloseWaitStopRandom = 0
-		If GUICtrlRead($chkCloseWaitEnable) = $GUI_CHECKED Then GUICtrlSetState($btnCloseWaitStop, $GUI_ENABLE)
+		GUICtrlSetState($btnCloseWaitStop, $GUI_ENABLE)
 	EndIf
 EndFunc   ;==>btnCloseWaitStopRandom
 
@@ -441,7 +433,6 @@ Func chkTroopOrder($bNoiseMode = True)
 			For $i = 0 To UBound($DefaultTroopGroup) - 1
 				$sNewTrainList &= $TroopName[$i] & ", "
 			Next
-			$sNewTrainList = StringLeft($sNewTrainList, StringLen($sNewTrainList)-2)
 			Setlog("Current train order= " & $sNewTrainList, $COLOR_BLUE)
 		EndIf
 	EndIf
@@ -473,7 +464,6 @@ Func chkDarkTroopOrder($bNoiseMode = True)
 			For $i = 0 To UBound($DefaultTroopGroupDark) - 1
 				$sNewTrainList &= $TroopDarkName[$i] & ", "
 			Next
-			$sNewTrainList = StringLeft($sNewTrainList, StringLen($sNewTrainList)-2)
 			Setlog("Current train order= " & $sNewTrainList, $COLOR_BLUE)
 		EndIf
 	EndIf
@@ -798,16 +788,14 @@ Func IsUseCustomDarkTroopOrder()
 	Return True
 EndFunc   ;==>IsUseCustomDarkTroopOrder
 
-
+; SmartZap from ChaCalGyn (LunaEclipse)- DEMEN
 Func chkSmartLightSpell()
     If GUICtrlRead($chkSmartLightSpell) = $GUI_CHECKED Then
-		GUICtrlSetState($chkExtLightSpell, $GUI_DISABLE)
         GUICtrlSetState($chkSmartZapDB, $GUI_ENABLE)
         GUICtrlSetState($chkSmartZapSaveHeroes, $GUI_ENABLE)
         GUICtrlSetState($txtMinDark, $GUI_ENABLE)
         $ichkSmartZap = 1
     Else
-		GUICtrlSetState($chkExtLightSpell, $GUI_ENABLE)
         GUICtrlSetState($chkSmartZapDB, $GUI_DISABLE)
         GUICtrlSetState($chkSmartZapSaveHeroes, $GUI_DISABLE)
         GUICtrlSetState($txtMinDark, $GUI_DISABLE)
@@ -834,17 +822,4 @@ EndFunc   ;==>chkSmartZapSaveHeroes
 Func txtMinDark()
 	$itxtMinDE = GUICtrlRead($txtMinDark)
 EndFunc   ;==>txtMinDark
-
-Func ExtLightSpell()	; TheRevenor - ExtremeZap
-	If GUICtrlRead($chkExtLightSpell) = $GUI_CHECKED Then
-		GUICtrlSetState($chkSmartZapDB, $GUI_ENABLE)
-		GUICtrlSetState($txtMinDark, $GUI_ENABLE)
-		GUICtrlSetState($chkSmartLightSpell, $GUI_DISABLE)
-		$ichkExtLightSpell = 1
-	Else
-		GUICtrlSetState($chkSmartLightSpell, $GUI_ENABLE)
-		GUICtrlSetState($chkSmartZapDB, $GUI_DISABLE)
-		GUICtrlSetState($txtMinDark, $GUI_DISABLE)
-		$ichkExtLightSpell = 0
-	EndIf
- EndFunc   ;==>ExtLightSpell
+; =========== SmartZap from ChaCalGyn (LunaEclipse) =========== - DEMEN

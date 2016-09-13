@@ -36,13 +36,6 @@ Func CheckBaseQuick()
 		EndIf
 
 		Collect() ; Empty Collectors
-		;========MOD: Put Heroes To Sleep Due To Personal Break LogOff========
-        If $ClosedDueToPB = True Then
-            ToggleGuard()
-        EndIf
-        ;========END MOD: Put Heroes To Sleep Due To Personal Break LogOff========
-
-		Collect() ; Empty Collectors
 		If _Sleep($iDelayRunBot1) Then Return
 
 	Else

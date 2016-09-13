@@ -50,25 +50,17 @@ $grpDebug = GUICtrlCreateGroup(GetTranslated(636,34, "Debug"), $x - 20, $y - 20,
 		GUICtrlSetState(-1, $GUI_DISABLE)
 		GUICtrlSetState(-1, $GUI_HIDE)
 
-Local $x = 295
+Local $x = 305
 $y = 45
-	$btnTestTrain = GUICtrlCreateButton(GetTranslated(636,88, "Test Train"), $x  , $y , 140, 30)
+	$btnTestTrain = GUICtrlCreateButton(GetTranslated(636,88, "Test Train"), $x  , $y , 120, 30)
 
-	$y += 35
+	$y += 50
 
-	$btnTestDonateCC = GUICtrlCreateButton(GetTranslated(636,89, "Test Donate"), $x  , $y , 140, 30)
+	$btnTestDonateCC = GUICtrlCreateButton(GetTranslated(636,89, "Test Donate"), $x  , $y , 120, 30)
 
-	$y += 35
+	$y += 50
 
-	$btnTestAttackBar = GUICtrlCreateButton(GetTranslated(636,90, "Test Attack Bar"), $x  , $y , 140, 30)
-
-	$y += 35
-
-	$btnTestClickDrag = GUICtrlCreateButton(GetTranslated(636,102, "Test Click Drag (scrolling)"), $x  , $y , 140, 30)
-
-	$y += 35
-
-	$btnTestImage = GUICtrlCreateButton(GetTranslated(636,103, "Test Image"), $x  , $y , 140, 30)
+	$btnTestAttackBar = GUICtrlCreateButton(GetTranslated(636,90, "Test Attack Bar"), $x  , $y , 120, 30)
 
 GUICtrlCreateGroup("", -99, -99, 1, 1)
 

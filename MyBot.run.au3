@@ -14,13 +14,11 @@
 #AutoIt3Wrapper_UseX64=7n
 #AutoIt3Wrapper_Run_Au3Stripper=y
 #Au3Stripper_Parameters=/mo /rsln
-;#AutoIt3Wrapper_Change2CUI=y
-;#pragma compile(Console, true)
 #pragma compile(Icon, "Images\MyBot.ico")
 #pragma compile(FileDescription, Clash of Clans Bot - A Free Clash of Clans bot - https://mybot.run)
 #pragma compile(ProductName, My Bot)
-#pragma compile(ProductVersion, 6.2.2)
-#pragma compile(FileVersion, 6.2.2)
+#pragma compile(ProductVersion, 6.2.1)
+#pragma compile(FileVersion, 6.2.1)
 #pragma compile(LegalCopyright, © https://mybot.run)
 #pragma compile(Out, MyBot.run.exe)  ; Required
 
@@ -35,12 +33,12 @@ ProcessSetPriority(@AutoItPID, $PROCESS_ABOVENORMAL)
 Global $iBotLaunchTime = 0
 Local $hBotLaunchTime = TimerInit()
 
-$sBotVersion = "v6.2.2" ;~ Don't add more here, but below. Version can't be longer than vX.y.z because it it also use on Checkversion()
+$sBotVersion = "v6.2.1" ;~ Don't add more here, but below. Version can't be longer than vX.y.z because it it also use on Checkversion()
+$sModVersion = "Demen_v2.4" ;- Adding Mod Version - DEMEN
 $sBotTitle = "My Bot " & $sBotVersion & " " ;~ Don't use any non file name supported characters like \ / : * ? " < > |
 
 #include "COCBot\functions\Config\DelayTimes.au3"
 #include "COCBot\MBR Global Variables.au3"
-_GDIPlus_Startup()
 #include "COCBot\GUI\MBR GUI Design Splash.au3"
 #include "COCBot\functions\Config\ScreenCoordinates.au3"
 #include "COCBot\functions\Other\ExtMsgBox.au3"
@@ -62,17 +60,10 @@ Local $sMsg
 $sMsg = GetTranslated(500, 1, "Don't Run/Compile the Script as (x64)! Try to Run/Compile the Script as (x86) to get the bot to work.\r\n" & _
 							  "If this message still appears, try to re-install AutoIt.")
 If @AutoItX64 = 1 Then
-	If IsHWnd($hSplash) Then GUIDelete($hSplash) ; Delete the splash screen since we don't need it anymore
 	MsgBox(0, "", $sMsg)
-	_GDIPlus_Shutdown()
 	Exit
 EndIf
 
-#include "COCBot\functions\Other\MBRFunc.au3"
-; check for VC2010, .NET software and MyBot Files and Folders
-If CheckPrerequisites() Then
-	MBRFunc(True) ; start MBRFunctions dll
-EndIf
 
 #include "COCBot\functions\Android\Android.au3"
 
@@ -82,13 +73,10 @@ $sBotTitle = $sBotTitle & "(" & ($AndroidInstance <> "" ? $AndroidInstance : $An
 UpdateSplashTitle($sBotTitle & GetTranslated(500, 20, ", Profile: %s", $sCurrProfile))
 
 If $bBotLaunchOption_Restart = True Then
-   If WinGetHandle($sBotTitle) Then SplashStep(GetTranslated(500, 36, "Closing previous bot..."))
    If CloseRunningBot($sBotTitle) = True Then
 	  ; wait for Mutexes to get disposed
 	  Sleep(3000)
    EndIf
-Else
-	SplashStep("")
 EndIF
 
 Local $cmdLineHelp = GetTranslated(500, 2, "By using the commandline (or a shortcut) you can start multiple Bots:\r\n" & _
@@ -110,9 +98,7 @@ EndIf
 
 $sMsg = GetTranslated(500, 5, "My Bot for %s is already running.\r\n\r\n", $sAndroidInfo)
 If $hMutex_BotTitle = 0 Then
-	If IsHWnd($hSplash) Then GUIDelete($hSplash) ; Delete the splash screen since we don't need it anymore
 	MsgBox(BitOR($MB_OK, $MB_ICONINFORMATION, $MB_TOPMOST), $sBotTitle, $sMsg & $cmdLineHelp)
-	_GDIPlus_Shutdown()
 	Exit
 EndIf
 
@@ -120,9 +106,7 @@ $hMutex_Profile = _Singleton(StringReplace($sProfilePath & "\" & $sCurrProfile, 
 $sMsg = GetTranslated(500, 6, "My Bot with Profile %s is already running in %s.\r\n\r\n", $sCurrProfile, $sProfilePath & "\" & $sCurrProfile)
 If $hMutex_Profile = 0 Then
 	_WinAPI_CloseHandle($hMutex_BotTitle)
-	If IsHWnd($hSplash) Then GUIDelete($hSplash) ; Delete the splash screen since we don't need it anymore
 	MsgBox(BitOR($MB_OK, $MB_ICONINFORMATION, $MB_TOPMOST), $sBotTitle, $sMsg & $cmdLineHelp)
-	_GDIPlus_Shutdown()
 	Exit
 EndIf
 
@@ -160,6 +144,13 @@ If $ichkDeleteLogs = 1 Then DeleteFiles($dirLogs, "*.*", $iDeleteLogsDays, 0)
 If $ichkDeleteLoots = 1 Then DeleteFiles($dirLoots, "*.*", $iDeleteLootsDays, 0)
 If $ichkDeleteTemp = 1 Then DeleteFiles($dirTemp, "*.*", $iDeleteTempDays, 0)
 If $ichkDeleteTemp = 1 Then DeleteFiles($dirTempDebug, "*.*", $iDeleteTempDays, 0)
+FileChangeDir($LibDir)
+
+; check for VC2010, .NET software and MyBot Files and Folders
+If CheckPrerequisites() Then
+	MBRFunc(True) ; start MBRFunctions dll
+	debugMBRFunctions($debugSearchArea, $debugRedArea, $debugOcr) ; set debug levels
+EndIf
 
 $sMsg = GetTranslated(500, 7, "Found running %s %s" , $Android, $AndroidVersion)
 If $FoundRunningAndroid Then
@@ -170,8 +161,8 @@ If $FoundInstalledAndroid Then
 EndIf
 SetLog(GetTranslated(500, 8, "Android Emulator Configuration: %s", $sAndroidInfo), $COLOR_GREEN)
 
-;AdlibRegister("PushBulletRemoteControl", $PBRemoteControlInterval)
-;AdlibRegister("PushBulletDeleteOldPushes", $PBDeleteOldPushesInterval)
+AdlibRegister("PushBulletRemoteControl", $PBRemoteControlInterval)
+AdlibRegister("PushBulletDeleteOldPushes", $PBDeleteOldPushesInterval)
 
 CheckDisplay() ; verify display size and DPI (Dots Per Inch) setting
 
@@ -183,6 +174,7 @@ LoadAmountOfResourcesImages()
 
 ;~ InitializeVariables();initialize variables used in extra windows
 CheckVersion() ; check latest version on mybot.run site
+btnUpdateProfile() ; SwitchAcc - DEMEN
 
 ;~ Remember time in Milliseconds bot launched
 $iBotLaunchTime = TimerDiff($hBotLaunchTime)
@@ -195,8 +187,6 @@ EndIf
 
 ;~ Restore process priority
 ProcessSetPriority(@AutoItPID, $iBotProcessPriority)
-InitOrder()        ;chalicucu init SwitchCOCAcc
-AccStatInit()    ;chalicucu init stats [SwitchCOCAcc]
 
 ;AutoStart Bot if request
 AutoStart()
@@ -213,42 +203,27 @@ While 1
 		Case $eBotSearchMode
 			BotSearchMode()
 			If $BotAction = $eBotSearchMode Then $BotAction = $eBotNoAction
-		Case $eBotClose
-			BotClose()
 	EndSwitch
 WEnd
 
 Func runBot() ;Bot that runs everything in order
+
+   If $ichkSwitchAcc = 1 And $bReMatchAcc = True Then 				; SwitchAcc - DEMEN
+	  $nCurProfile = _GUICtrlCombobox_GetCurSel($cmbProfile) + 1
+	  Setlog("Rematching Profile [" & $nCurProfile &"] - " & $ProfileList[$nCurProfile] & " (CoC Acc. " & $aMatchProfileAcc[$nCurProfile-1] & ")")
+	  SwitchCoCAcc()
+	  $bReMatchAcc = False
+   EndIf
+
 	$TotalTrainedTroops = 0
 	Local $Quickattack = False
 	Local $iWaitTime
-    If $ichkSwitchAcc = 1 Then
-        RequestCC()        ;Chalicucu
-    ;========MOD: Put Heroes To Sleep Due To Personal Break LogOff========
-        $ClosedDueToPB = True
-        If $ClosedDueToPB = True Then
-            ToggleGuard()
-        EndIf
-    ;========MOD: Put Heroes To Sleep Due To Personal Break LogOff========
-        SwitchCOCAcc(True)    ;Chalicucu, first match acc and profile
-    EndIf
 	While 1
 		$Restart = False
 		$fullArmy = False
 		$CommandStop = -1
 		If _Sleep($iDelayRunBot1) Then Return
 		checkMainScreen()
-        If IsPlannedTimeNow() = False And $CommandStop <> 0 Then    ;Chalicucu not start emulator. relax
-            If $ichkSwitchAcc = 1 And $AccRelaxTogether = 1 Then
-                CloseAndroid()
-                SetLog("Relax! Attack not planned...",$COLOR_RED)
-                If _Sleep(300000) Then Return
-                ContinueLoop
-            ElseIf $ichkSwitchAcc = 1 Then
-                SwitchCOCAcc()
-                If _Sleep(1000) Then Return
-            EndIf
-        EndIf
 		If $Restart = True Then ContinueLoop
 		chkShieldStatus()
 		If $Restart = True Then ContinueLoop
@@ -322,6 +297,9 @@ Func runBot() ;Bot that runs everything in order
 				   EndIf
 				   If checkAndroidTimeLag() = True Then ContinueLoop 2 ; must be level 2 due to loop-in-loop
 			   WEnd
+
+			   If $ichkSwitchAcc = 1 And $aProfileType[$nCurProfile-1] = 2 Then checkSwitchAcc()  		;  Switching to active account after donation - SwitchAcc for  - DEMEN
+
 					If $RunState = False Then Return
 					If $Restart = True Then ContinueLoop
 			   If $iUnbreakableMode >= 1 Then
@@ -350,11 +328,7 @@ Func runBot() ;Bot that runs everything in order
 				UpgradeWall()
 					If _Sleep($iDelayRunBot3) Then Return
 					If $Restart = True Then ContinueLoop
-                    ;Chalicucu change Idle()
-                    If Idle()= 1 Then
-                       $Quickattack = False
-                       ContinueLoop
-                    EndIf
+				Idle()
 					;$fullArmy1 = $fullArmy
 					If _Sleep($iDelayRunBot3) Then Return
 					If $Restart = True Then ContinueLoop
@@ -389,7 +363,7 @@ Func runBot() ;Bot that runs everything in order
 			EndIf
 			If _Sleep($iDelayRunBot3) Then Return
 			;  OCR read current Village Trophies when OOS restart maybe due PB or else DropTrophy skips one attack cycle after OOS
-			$iTrophyCurrent = Number(getTrophyMainScreen($aTrophies[0], $aTrophies[1]))
+			$iTrophyCurrent = getTrophyMainScreen($aTrophies[0], $aTrophies[1])
 			If $debugsetlog = 1 Then SetLog("Runbot Trophy Count: " & $iTrophyCurrent, $COLOR_PURPLE)
 			AttackMain()
 			If $OutOfGold = 1 Then
@@ -410,59 +384,12 @@ Func Idle() ;Sequence that runs until Full Army
 	Local $TimeIdle = 0 ;In Seconds
 	If $debugsetlog = 1 Then SetLog("Func Idle ", $COLOR_PURPLE)
 
-	While $fullArmy = False Or $bFullArmyHero = False Or $bFullArmySpells = False Or $CommandStop = 0       ;Chalicucu add CommandStop
+	While $fullArmy = False Or $bFullArmyHero = False Or $bFullArmySpells = False
 		checkAndroidTimeLag()
 
 		If $RequestScreenshot = 1 Then PushMsg("RequestScreenshot")
 		If _Sleep($iDelayIdle1) Then Return
-		If $CommandStop = -1 Or ($ichkSwitchAcc = 1 And $CommandStop = 0) Then
-		   SetLog("====== Waiting for full army ======", $COLOR_GREEN)						;Chalicucu
-            If $ichkSwitchAcc = 1 And ($iRemainTrainTime > 2 Or $CommandStop = 0) Then    	;Chalicucu
-                RequestCC()
-				If _Sleep(1000) Then Return
-			   ;========MOD: Put Heroes To Sleep Due To Personal Break LogOff========
-			    $ClosedDueToPB = True
-			    If $ClosedDueToPB = True Then
-					 ToggleGuard()
-			    EndIf
-			   ;========MOD: Put Heroes To Sleep Due To Personal Break LogOff========
-				SetLog("====== Switching COC account ======", $COLOR_GREEN)
-				If $CommandStop <> 0 And $iSwitchMode = 0 Then
-					Local $lRemainTrainTime = RemainTrainTime(True, False, True)
-					SetLog("Before leaving. Training remain: " & $lRemainTrainTime & " minute(s)", $COLOR_GREEN)
-					If $lRemainTrainTime >= 0 Then
-						$iRemainTrainTime = $lRemainTrainTime
-						SetCurTrainTime($iRemainTrainTime)
-					EndIf
-					ClickP($aAway, 1, 0, "#0167")											;Click Away
-				EndIf
-				If SwitchCOCAcc() Then     													;Chalicucu switch COC acc
-					checkMainScreen(True)
-					Train()
-					If $CommandStop <> 0 And $iRemainTrainTime > 0 Then						;new village camp
-						CloseCOC()
-						If $iRemainTrainTime < 3 Then
-							SetLog("====== Sleeping " & $iRemainTrainTime & " minutes and wait to attack ======", $COLOR_GREEN)
-							If _Sleep($iRemainTrainTime * 60000) Then Return
-						Else
-							If $iSwitchMode = 0 And $CommandStop <>  0 And $iSwitchCnt > $CoCAccNo Then
-								SetLog("====== Sleeping " & ($iRemainTrainTime - 2) & " minutes ======", $COLOR_GREEN)
-								If _Sleep(($iRemainTrainTime - 2) * 60000) Then Return		;turn back before 2 minutes to donation, fill army ... then attack
-							Else
-								SetLog("====== Sleeping 2 minutes ======", $COLOR_GREEN)
-								If _Sleep(120000) Then Return
-							EndIf
-						EndIf
-						OpenCOC()
-					Else
-						If _Sleep(2000) Then Return
-					EndIf
-					Return 1
-				EndIf
-            Else
-                If _Sleep(30000) Then Return
-            EndIf
-        EndIf
+		If $CommandStop = -1 Then SetLog("====== Waiting for full army ======", $COLOR_GREEN)
 		Local $hTimer = TimerInit()
 		Local $iReHere = 0
 
@@ -475,10 +402,10 @@ Func Idle() ;Sequence that runs until Full Army
 		If _Sleep($iDelayIdle1) Then ExitLoop
 		checkMainScreen(False) ; required here due to many possible exits
 		If ($CommandStop = 3 Or $CommandStop = 0) Then
-			CheckOverviewFullArmy(True, False)  ; use true parameter to open train overview window
-			getArmyHeroCount(False, False)
-			getArmySpellCount(False, True) ; use true parameter to close train overview window
+			CheckOverviewFullArmy(True)
 			If _Sleep($iDelayIdle1) Then Return
+			getArmyHeroCount(True, True)
+			getArmySpellCount(True, True)
 			If Not ($fullArmy) And $bTrainEnabled = True Then
 				SetLog("Army Camp and Barracks are not full, Training Continues...", $COLOR_ORANGE)
 				$CommandStop = 0
@@ -549,15 +476,13 @@ Func Idle() ;Sequence that runs until Full Army
 		SetLog("Time Idle: " & StringFormat("%02i", Floor(Floor($TimeIdle / 60) / 60)) & ":" & StringFormat("%02i", Floor(Mod(Floor($TimeIdle / 60), 60))) & ":" & StringFormat("%02i", Floor(Mod($TimeIdle, 60))))
 
 		If $OutOfGold = 1 Or $OutOfElixir = 1 Then Return  ; Halt mode due low resources, only 1 idle loop
-		If ($CommandStop = 3 Or $CommandStop = 0) And $bTrainEnabled = False Then ExitLoop ; If training is not enabled, run only 1 idle loop
-
 		If $iChkSnipeWhileTrain = 1 Then SnipeWhileTrain()  ;snipe while train
 
-		If $CommandStop = -1 Then ; Check if closing bot/emulator while training and not in halt mode
-			SmartWait4Train()
-			If $Restart = True Then ExitLoop ; if smart wait activated, exit to runbot in case user adjusted GUI or left emulator/bot in bad state
+		If $CommandStop = -1 And $ichkSwitchAcc = 1 Then
+		   checkSwitchAcc()					; SwitchAcc - DEMEN
+		ElseIf $ichkSwitchAcc <> 1 Then		; SwitchAcc - DEMEN
+		   SmartWait4Train()  ; Check if closing bot/emulator while training and not in halt mode
 		EndIf
-
 	WEnd
 EndFunc   ;==>Idle
 
@@ -598,7 +523,7 @@ Func AttackMain() ;Main control for attack functions
 		Else
 			Setlog("No one of search condition match:", $COLOR_BLUE)
 			Setlog("Waiting on troops, heroes and/or spells according to search settings", $COLOR_BLUE)
-			BotCommand()			;Chalicucu
+			If $ichkSwitchAcc = 1 Then CheckSwitchAcc() 		; SwitchAcc - DEMEN
 		EndIf
 	Else
 		SetLog("Attacking Not Planned, Skipped..", $COLOR_RED)

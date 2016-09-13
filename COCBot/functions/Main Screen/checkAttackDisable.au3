@@ -49,12 +49,6 @@ Func checkAttackDisable($iSource, $Result = "")
 					If _CheckPixel($aSurrenderButton, $bCapturePixel) Then ; village search requires end battle 1s, so check for surrender/endbattle button
 						ReturnHome(False, False) ;If End battle is available
 					Else
-						;========MOD: Put Heroes To Sleep Due To Personal Break LogOff========
-                        $ClosedDueToPB = True
-                        If $ClosedDueToPB = True Then
-                            ToggleGuard()
-						 EndIf
-						;========END MOD: Put Heroes To Sleep Due To Personal Break LogOff========
 						CloseCoC()
 					EndIf
 				Else
